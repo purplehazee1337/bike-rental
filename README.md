@@ -36,7 +36,7 @@ Przydatne polecenia Maven:
 ## 1. Podstawowe założenia
 - - [ ] Projekt maven’owy z obsługą minimalnej liczby zależności zewnętrznych.
 - - [ ] Paczka wynikowa: JAR.
-- - [ ] Zgodność źródeł oraz klas wynikowych z Java 11.
+- - [x] Zgodność źródeł oraz klas wynikowych z Java 11.
 - - [ ] Aplikacja z interfejsem okienkowym SWING, wielowątkowa z obsługą puli wątków.
 - - [ ] Obsługa parametrów w wydzielonej klasie: liczba wątków w puli.
 - - [ ] Kod obłożony testami jednostkowymi dostarczonymi w projekcie.
