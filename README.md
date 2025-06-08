@@ -23,25 +23,33 @@ Aby zbudować projekt Mavenowy, wykonaj następujące kroki:
    - `install` — kompiluje projekt, uruchamia testy i instaluje artefakt do lokalnego repozytorium Maven.
 3. Po pomyślnym zbudowaniu, plik wynikowy (np. JAR lub WAR) znajdziesz w katalogu `target`.
 
+Aby wygenerować dokumentacje, wykonaj następujące kroki:
+1. Przejdź do katalogu projektu, w którym znajduje się plik `pom.xml`, np. `cd /ścieżka/do/projektu`.
+2. Uruchom w terminalu polecenie:
+   `mvn javadoc:javadoc`
+3. Po pomyślnym zbudowaniu, plik do uruchomienia dokumentacji znajdziesz w katalogu `target/site/apidocs/index.html`.
+
 Przydatne polecenia Maven:  
 - `mvn compile` — kompiluje kod źródłowy,  
 - `mvn test` — uruchamia testy jednostkowe,  
 - `mvn package` — tworzy pakiet bez instalacji w lokalnym repozytorium.
 
-
 ### 📁 Zależności
 
-- **JUnit Jupiter (5.8.0)** – biblioteka testowa wykorzystywana w testach jednostkowych.
+- **JUnit Jupiter (5.8.0)** – biblioteka testowa wykorzystywana w testach jednostkowych.  
+- **Log4j API (2.23.0)** – interfejs API dla logowania.  
+- **Log4j Core (2.23.0)** – implementacja silnika logowania Log4j.  
+
 
 ## 1. Podstawowe założenia
-- - [ ] Projekt maven’owy z obsługą minimalnej liczby zależności zewnętrznych.
-- - [ ] Paczka wynikowa: JAR.
+- - [x] Projekt maven’owy z obsługą minimalnej liczby zależności zewnętrznych.
+- - [x] Paczka wynikowa: JAR.
 - - [x] Zgodność źródeł oraz klas wynikowych z Java 11.
 - - [ ] Aplikacja z interfejsem okienkowym SWING, wielowątkowa z obsługą puli wątków.
 - - [ ] Obsługa parametrów w wydzielonej klasie: liczba wątków w puli.
 - - [ ] Kod obłożony testami jednostkowymi dostarczonymi w projekcie.
 - - [ ] Kod zawiera komentarze do klas, metod i zmiennych składowych.
-- - [ ] Do projektu dołączony jest wygenerowany poprawny Javadoc zawierający opisy pakietów, klas, metod i zmiennych.
+- - [x] Do projektu dołączony jest wygenerowany poprawny Javadoc zawierający opisy pakietów, klas, metod i zmiennych.
 
 ## 2. Opis merytoryczny zadania
 Aplikacja okienkowa napisana w SWING do wsparcia obsługi procesu wypożyczania roweru. Program ma umożliwiać:
@@ -64,5 +72,5 @@ Do programu należy dostarczyć testy sprawdzające poprawność działania posz
 
 ### Zakończony projekt przesłany do oceny powinien zawierać:
 1. - [ ]  Kod źródłowy projektu wraz z testami w strukturze projektu Maven.
-2. - [ ]  Poprawną dokumentację Javadoc.
+2. - [x]  Poprawną dokumentację Javadoc.
 3. - [ ]  Dokument opisu ról w projekcie realizowanych przez poszczególnych członków zespołu.
