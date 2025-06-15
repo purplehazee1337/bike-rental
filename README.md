@@ -62,8 +62,8 @@ Aplikacja okienkowa napisana w SWING do wsparcia obsługi procesu wypożyczania 
 6. - [ ]  Raportowanie aktualnie dostępnych rowerów (nie będących na wypożyczeniu).
 7. - [ ]  Raportowanie niezwróconych rowerów na czas.
 8. - [ ]  Raportowanie rowerów będących na wypożyczeniu.
-9. - [ ]  Zapis do pliku całej zawartości wprowadzonych danych z użyciem `DataOutputStream`.
-10. - [ ]  Odczyt danych z pliku z użyciem `DataInputStream`.
+9. - [x]  Zapis do pliku całej zawartości wprowadzonych danych z użyciem `DataOutputStream`.
+10. - [x]  Odczyt danych z pliku z użyciem `DataInputStream`.
 11. - [ ]  Wyszukiwanie i wyświetlanie danych o korzystających i rowerach.
 
 Do programu należy dostarczyć testy sprawdzające poprawność działania poszczególnych funkcji programu.
