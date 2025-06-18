@@ -21,7 +21,45 @@ public class Database {
 	private static String basePath = "./src/main/resources/data/";
 	private static final Logger dbLog = LogManager.getLogger(Database.class);
 	
-	public static void saveBikes(List<Bike> bikes, List<Types> types, String fileName) {
+	public static DataBundle readAll() {
+	    List<Types> types = readTypes("types.dat");
+	    List<Client> clients = readClients("clients.dat");
+	    List<Bike> bikes = readBikes("bikes.dat", types);
+	    List<Rental> rentals = readRentals("rentals.dat", clients, bikes);
+
+	    return new DataBundle(types, bikes, clients, rentals);
+	}
+	
+	public static void saveAll(DataBundle bundle) {
+	    saveTypes(bundle.types, "types.dat");
+	    saveBikes(bundle.bikes, bundle.types, "bikes.dat");
+	    saveClients(bundle.clients, "clients.dat");
+	    saveRentals(bundle.rentals, bundle.clients, bundle.bikes, "rentals.dat");
+	}
+	
+	public static void printAll(DataBundle bundle) {
+	    System.out.println("\nLoaded Types:");
+	    bundle.types.forEach(type -> System.out.println(" - " + type.getNazwaTypu()));
+
+	    System.out.println("\nLoaded Bikes:");
+	    bundle.bikes.forEach(bike ->
+	        System.out.println(" - " + bike.getModel() + " (" + bike.getType().getNazwaTypu() + ")")
+	    );
+
+	    System.out.println("\nLoaded Clients:");
+	    bundle.clients.forEach(client ->
+	        System.out.println(" - " + client.getFirstName() + " " + client.getLastName())
+	    );
+
+	    System.out.println("\nLoaded Rentals:");
+	    bundle.rentals.forEach(rental ->
+	        System.out.println(" - " + rental.getId() + ": " +
+	            rental.getClient().getFirstName() + " rented " +
+	            rental.getBike().getModel() + " on " + rental.getStart())
+	    );
+	}
+	
+	private static void saveBikes(List<Bike> bikes, List<Types> types, String fileName) {
 	    try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(basePath + fileName))) {
 	        dos.writeInt(Bike.getIdCount());
 	        dos.writeInt(bikes.size());
@@ -47,7 +85,7 @@ public class Database {
 	    }
 	}
 	
-	public static List<Bike> readBikes(String fileName, List<Types> types) {
+	private static List<Bike> readBikes(String fileName, List<Types> types) {
 	    List<Bike> bikes = new ArrayList<>();
 	    try (DataInputStream dis = new DataInputStream(new FileInputStream(basePath + fileName))) {
 	        int idCount = dis.readInt();
@@ -76,7 +114,7 @@ public class Database {
 	    return bikes;
 	}
 	
-	public static void saveTypes(List<Types> types, String fileName) {
+	private static void saveTypes(List<Types> types, String fileName) {
 	    try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(basePath + fileName))) {
 	        dos.writeInt(types.size());
 	        for (Types type : types) {
@@ -89,7 +127,7 @@ public class Database {
 	    }
 	}
 
-	public static List<Types> readTypes(String fileName) {
+	private static List<Types> readTypes(String fileName) {
 	    List<Types> types = new ArrayList<>();
 	    try (DataInputStream dis = new DataInputStream(new FileInputStream(basePath + fileName))) {
 	        int count = dis.readInt();
@@ -105,7 +143,7 @@ public class Database {
 	    return types;
 	}
 	
-	public static void saveClients(List<Client> clients, String fileName) {
+	private static void saveClients(List<Client> clients, String fileName) {
 	    try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(basePath + fileName))) {
 	        dos.writeInt(Client.getClientIdCount());
 	        dos.writeInt(clients.size());
@@ -124,7 +162,7 @@ public class Database {
 	    }
 	}
 	
-	public static List<Client> readClients(String fileName) {
+	private static List<Client> readClients(String fileName) {
 	    List<Client> clients = new ArrayList<>();
 
 	    try (DataInputStream dis = new DataInputStream(new FileInputStream(basePath + fileName))) {
@@ -150,7 +188,7 @@ public class Database {
 	    return clients;
 	}
 	
-	public static void saveRentals(List<Rental> rentals, List<Client> clients, List<Bike> bikes, String fileName) {
+	private static void saveRentals(List<Rental> rentals, List<Client> clients, List<Bike> bikes, String fileName) {
 	    try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(basePath + fileName))) {
 	        dos.writeInt(Rental.getRentalIdCount());
 	        dos.writeInt(rentals.size());
@@ -182,7 +220,7 @@ public class Database {
 	    }
 	}
 	
-	public static List<Rental> readRentals(String fileName, List<Client> clients, List<Bike> bikes) {
+	private static List<Rental> readRentals(String fileName, List<Client> clients, List<Bike> bikes) {
 	    List<Rental> rentals = new ArrayList<>();
 	    try (DataInputStream dis = new DataInputStream(new FileInputStream(basePath + fileName))) {
 	        int idCount = dis.readInt();
