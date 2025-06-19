@@ -21,6 +21,10 @@ public class Database {
 	private static String basePath = "./src/main/resources/data/";
 	private static final Logger dbLog = LogManager.getLogger(Database.class);
 	
+	public static void setBasePath(String basePath) {
+		Database.basePath = basePath;
+	}
+
 	public static DataBundle readAll() {
 	    List<Types> types = readTypes("types.dat");
 	    List<Client> clients = readClients("clients.dat");
@@ -39,11 +43,11 @@ public class Database {
 	
 	public static void printAll(DataBundle bundle) {
 	    System.out.println("\nLoaded Types:");
-	    bundle.types.forEach(type -> System.out.println(" - " + type.getNazwaTypu()));
+	    bundle.types.forEach(type -> System.out.println(" - " + type.getName()));
 
 	    System.out.println("\nLoaded Bikes:");
 	    bundle.bikes.forEach(bike ->
-	        System.out.println(" - " + bike.getModel() + " (" + bike.getType().getNazwaTypu() + ")")
+	    System.out.println(" - " + bike.getModel() + " (" + bike.getType().getName() + ") | Rented: " + (bike.isRented() ? "Yes" : "No"))
 	    );
 
 	    System.out.println("\nLoaded Clients:");
@@ -53,9 +57,10 @@ public class Database {
 
 	    System.out.println("\nLoaded Rentals:");
 	    bundle.rentals.forEach(rental ->
-	        System.out.println(" - " + rental.getId() + ": " +
-	            rental.getClient().getFirstName() + " rented " +
-	            rental.getBike().getModel() + " on " + rental.getStart())
+	    System.out.println(" - " + rental.getId() + ": " +
+	        rental.getClient().getFirstName() + " rented " +
+	        rental.getBike().getModel() + " on " + rental.getStart() +
+	        " | Returned: " + (rental.isReturned() ? "Yes" : "No"))
 	    );
 	}
 	
@@ -118,8 +123,8 @@ public class Database {
 	    try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(basePath + fileName))) {
 	        dos.writeInt(types.size());
 	        for (Types type : types) {
-	            dos.writeUTF(type.getNazwaTypu());
-	            dos.writeUTF(type.getOpisTypuRoweru());
+	            dos.writeUTF(type.getName());
+	            dos.writeUTF(type.getDescription());
 	        }
 	        dbLog.debug("BikeType list saved.");
 	    } catch (IOException e) {
@@ -204,9 +209,18 @@ public class Database {
 
 	            dos.writeLong(rental.getStart().toEpochSecond(ZoneOffset.UTC));
 
-	            if (rental.getEnd() != null) {
+	            // Save plannedEnd
+	            if (rental.getPlannedEnd() != null) {
 	                dos.writeBoolean(true);
-	                dos.writeLong(rental.getEnd().toEpochSecond(ZoneOffset.UTC));
+	                dos.writeLong(rental.getPlannedEnd().toEpochSecond(ZoneOffset.UTC));
+	            } else {
+	                dos.writeBoolean(false);
+	            }
+
+	            // Save actualReturnDate
+	            if (rental.getActualReturnDate() != null) {
+	                dos.writeBoolean(true);
+	                dos.writeLong(rental.getActualReturnDate().toEpochSecond(ZoneOffset.UTC));
 	            } else {
 	                dos.writeBoolean(false);
 	            }
@@ -219,6 +233,7 @@ public class Database {
 	        dbLog.error(e);
 	    }
 	}
+
 	
 	private static List<Rental> readRentals(String fileName, List<Client> clients, List<Bike> bikes) {
 	    List<Rental> rentals = new ArrayList<>();
@@ -238,14 +253,19 @@ public class Database {
 
 	            LocalDateTime start = LocalDateTime.ofEpochSecond(dis.readLong(), 0, ZoneOffset.UTC);
 
-	            LocalDateTime end = null;
+	            LocalDateTime plannedEnd = null;
 	            if (dis.readBoolean()) {
-	                end = LocalDateTime.ofEpochSecond(dis.readLong(), 0, ZoneOffset.UTC);
+	                plannedEnd = LocalDateTime.ofEpochSecond(dis.readLong(), 0, ZoneOffset.UTC);
+	            }
+
+	            LocalDateTime actualReturnDate = null;
+	            if (dis.readBoolean()) {
+	                actualReturnDate = LocalDateTime.ofEpochSecond(dis.readLong(), 0, ZoneOffset.UTC);
 	            }
 
 	            boolean isReturned = dis.readBoolean();
 
-	            rentals.add(new Rental(id, client, bike, start, end, isReturned));
+	            rentals.add(new Rental(id, client, bike, start, plannedEnd, actualReturnDate, isReturned));
 	        }
 
 	        dbLog.debug("Rental data loaded.");
@@ -254,4 +274,5 @@ public class Database {
 	    }
 	    return rentals;
 	}
+
 }

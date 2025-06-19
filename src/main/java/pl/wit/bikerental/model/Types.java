@@ -4,47 +4,49 @@ public class Types {
     private static int typeIdCount = 0;
 
     private final String id;
-    private String nazwaTypu;
-    private String opisTypuRoweru;
+    private String name;
+    private String description;
 
     // Constructor for new type (auto-generate ID)
-    public Types(String nazwa, String opis) {
+    public Types(String name, String opis) {
         this.id = "TYP" + (++typeIdCount);
-        this.nazwaTypu = nazwa;
-        this.opisTypuRoweru = opis;
+        this.name = name;
+        this.description = opis;
     }
 
     // Constructor for loading from file (known ID)
     public Types(String id, String nazwa, String opis) {
         this.id = id;
-        this.nazwaTypu = nazwa;
-        this.opisTypuRoweru = opis;
+        this.name = nazwa;
+        this.description = opis;
     }
 
-    // Getters
-    public String getId() {
-        return id;
-    }
+	public static int getTypeIdCount() {
+		return typeIdCount;
+	}
 
-    public String getNazwaTypu() {
-        return nazwaTypu;
-    }
+	public static void setTypeIdCount(int typeIdCount) {
+		Types.typeIdCount = typeIdCount;
+	}
 
-    public String getOpisTypuRoweru() {
-        return opisTypuRoweru;
-    }
+	public String getName() {
+		return name;
+	}
 
-    // Static counter methods
-    public static int getTypeIdCount() {
-        return typeIdCount;
-    }
+	public void setName(String nazwaTypu) {
+		this.name = nazwaTypu;
+	}
 
-    public static void setTypeIdCount(int count) {
-        typeIdCount = count;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    @Override
-    public String toString() {
-        return id + ": " + nazwaTypu + " - " + opisTypuRoweru;
-    }
+	public void setDescription(String opisTypuRoweru) {
+		this.description = opisTypuRoweru;
+	}
+
+	public String getId() {
+		return id;
+	}
+
 }
