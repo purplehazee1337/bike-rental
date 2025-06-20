@@ -127,8 +127,4 @@ public class MainFrame extends JFrame {
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         return button;
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new MainFrame().setVisible(true));
-    }
 }
