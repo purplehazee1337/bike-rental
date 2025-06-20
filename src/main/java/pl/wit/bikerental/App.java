@@ -1,8 +1,9 @@
 package pl.wit.bikerental;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.SwingUtilities;
 
 import pl.wit.bikerental.model.Bike;
 import pl.wit.bikerental.model.Client;
@@ -11,6 +12,7 @@ import pl.wit.bikerental.model.Types;
 import pl.wit.bikerental.service.Service;
 import pl.wit.bikerental.storage.DataBundle;
 import pl.wit.bikerental.storage.Database;
+import pl.wit.bikerental.ui.MainFrame;
 
 public class App {
     public static void main(String[] args) {
@@ -35,25 +37,16 @@ public class App {
         if (bikes.isEmpty()) {
             Service.addBike(bikes, types.get(0), "Kross", "Hexagon", "27.5\"", "Solidny rower MTB", 15);
         }
-
-        // --- Create a rental ---
-        LocalDateTime plannedEnd = LocalDateTime.now().plusDays(3);
-        Service.newRental(rentals, bikes, clients, bikes.get(0).getId(), clients.get(0).getId(), plannedEnd);
-
-        // --- Save and print ---
-        DataBundle bundleToSave = new DataBundle(types, bikes, clients, rentals);
-        Database.printAll(bundleToSave);
-        Database.saveAll(bundleToSave);
-
-        // --- Complete rental to test ---
-        if (!rentals.isEmpty()) {
-            String rentalId = rentals.get(0).getId();
-            Service.completeRental(rentals, rentalId);
-        }
+        
+        SwingUtilities.invokeLater(() -> {
+            MainFrame frame = new MainFrame(bikes, clients, rentals);
+            frame.setVisible(true);
+        });
 
         // --- Final state ---
-        bundleToSave = new DataBundle(types, bikes, clients, rentals);
-        Database.printAll(bundleToSave);
-        Database.saveAll(bundleToSave);
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            DataBundle bundleToSave = new DataBundle(types, bikes, clients, rentals);
+            Database.saveAll(bundleToSave);
+        }));
     }
 }

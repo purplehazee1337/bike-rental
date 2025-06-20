@@ -30,7 +30,7 @@ public class Database {
 	    List<Client> clients = readClients("clients.dat");
 	    List<Bike> bikes = readBikes("bikes.dat", types);
 	    List<Rental> rentals = readRentals("rentals.dat", clients, bikes);
-
+	    System.out.println("Data loaded.");
 	    return new DataBundle(types, bikes, clients, rentals);
 	}
 	
@@ -39,6 +39,7 @@ public class Database {
 	    saveBikes(bundle.bikes, bundle.types, "bikes.dat");
 	    saveClients(bundle.clients, "clients.dat");
 	    saveRentals(bundle.rentals, bundle.clients, bundle.bikes, "rentals.dat");
+	    System.out.println("Data saved.");
 	}
 	
 	public static void printAll(DataBundle bundle) {
@@ -83,10 +84,8 @@ public class Database {
 	            dos.writeInt(bike.getPricePerH());
 	            dos.writeBoolean(bike.isRented());
 	        }
-
-	        dbLog.debug("Bikes saved.");
 	    } catch (IOException e) {
-	        dbLog.error(e);
+	        System.out.println(e);
 	    }
 	}
 	
@@ -112,9 +111,8 @@ public class Database {
 	            bikes.add(new Bike(id, type, marka, model, rozmiarKola, opis, pricePerH, isRented));
 	        }
 
-	        dbLog.debug("Bikes loaded.");
 	    } catch (IOException e) {
-	        dbLog.error(e);
+	        System.out.println(e);
 	    }
 	    return bikes;
 	}
@@ -126,9 +124,8 @@ public class Database {
 	            dos.writeUTF(type.getName());
 	            dos.writeUTF(type.getDescription());
 	        }
-	        dbLog.debug("BikeType list saved.");
 	    } catch (IOException e) {
-	        dbLog.error(e);
+	        System.out.println(e);
 	    }
 	}
 
@@ -141,9 +138,8 @@ public class Database {
 	            String opis = dis.readUTF();
 	            types.add(new Types(nazwa, opis));
 	        }
-	        dbLog.debug("BikeType list loaded.");
 	    } catch (IOException e) {
-	        dbLog.error(e);
+	        System.out.println(e);
 	    }
 	    return types;
 	}
@@ -161,9 +157,8 @@ public class Database {
 	            dos.writeUTF(c.getEmail());
 	        }
 
-	        dbLog.debug("Client data saved to " + basePath + fileName);
 	    } catch (IOException e) {
-	        dbLog.error(e);
+	        System.out.println(e);
 	    }
 	}
 	
@@ -185,9 +180,8 @@ public class Database {
 	            clients.add(new Client(id, firstName, lastName, phone, email));
 	        }
 
-	        dbLog.debug("Client data read from " + basePath + fileName);
 	    } catch (IOException e) {
-	        dbLog.error(e);
+	        System.out.println(e);
 	    }
 
 	    return clients;
@@ -228,9 +222,8 @@ public class Database {
 	            dos.writeBoolean(rental.isReturned());
 	        }
 
-	        dbLog.debug("Rental data saved.");
 	    } catch (IOException e) {
-	        dbLog.error(e);
+	        System.out.println(e);
 	    }
 	}
 
@@ -268,11 +261,9 @@ public class Database {
 	            rentals.add(new Rental(id, client, bike, start, plannedEnd, actualReturnDate, isReturned));
 	        }
 
-	        dbLog.debug("Rental data loaded.");
 	    } catch (IOException e) {
-	        dbLog.error(e);
+	        System.out.println(e);
 	    }
 	    return rentals;
 	}
-
 }
