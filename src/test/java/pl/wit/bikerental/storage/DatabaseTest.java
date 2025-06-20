@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @since 2025-06-15
  */
 
-class DbTest {
+class DatabaseTest {
 
     private static final String TEST_FILE_NAME = "bikesTest.dat";
     private static final String TEST_FILE_PATH = "./src/main/resources/" + TEST_FILE_NAME;
@@ -39,8 +39,8 @@ class DbTest {
         );
 
         // Act
-        Db.saveBikes(bikesToSave, TEST_FILE_NAME);
-        List<Bike> bikesRead = Db.readBikes(TEST_FILE_NAME);
+        Database.saveBikes(bikesToSave, TEST_FILE_NAME);
+        List<Bike> bikesRead = Database.readBikes(TEST_FILE_NAME);
 
         // Assert
         assertEquals(bikesToSave.size(), bikesRead.size());
@@ -59,7 +59,7 @@ class DbTest {
     void ReadFromNonexistentFileTest() {
         // Act & Assert
         assertDoesNotThrow(() -> {
-            List<Bike> bikes = Db.readBikes("nonexistent_file.dat");
+            List<Bike> bikes = Database.readBikes("nonexistent_file.dat");
             assertNotNull(bikes); // even if error is logged, it should not return null
         });
     }
