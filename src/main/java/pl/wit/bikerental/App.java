@@ -39,9 +39,10 @@ public class App {
         }
         
         SwingUtilities.invokeLater(() -> {
-            MainFrame frame = new MainFrame(bikes, clients, rentals);
+            MainFrame frame = new MainFrame(bikes, clients, rentals, types);
             frame.setVisible(true);
         });
+        
 
         // --- Final state ---
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {

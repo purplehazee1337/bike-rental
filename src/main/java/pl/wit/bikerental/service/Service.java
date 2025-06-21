@@ -47,17 +47,17 @@ public class Service {
 	
 	// ------------------- EDIT METHODS -------------------
 
-		public static boolean editBikeById(List<Bike> bikes, String bikeId, String marka, String model,
-		                                   String rozmiarKola, String opis, int pricePerH) {
+		public static boolean editBikeById(List<Bike> bikes, String bikeId, String brand, String model,
+		                                   String wheelSize, String description, int pricePerH) {
 		    Bike bike = findBikeById(bikes, bikeId);
 		    if (bike == null) {
 		        System.out.println("Bike with ID " + bikeId + " not found.");
 		        return false;
 		    }
-		    bike.setMarka(marka);
+		    bike.setBrand(brand);
 		    bike.setModel(model);
-		    bike.setRozmiarKola(rozmiarKola);
-		    bike.setOpis(opis);
+		    bike.setWheelSize(wheelSize);
+		    bike.setDescription(description);
 		    bike.setPricePerH(pricePerH);
 		    return true;
 		}
@@ -88,14 +88,14 @@ public class Service {
 		    return true;
 		}
 
-		public static boolean editTypeById(List<Types> types, String typeId, String newNazwa, String newOpis) {
+		public static boolean editTypeById(List<Types> types, String typeId, String newName, String newDescription) {
 		    Types type = findTypeById(types, typeId);
 		    if (type == null) {
 		        System.out.println("Type with ID " + typeId + " not found.");
 		        return false;
 		    }
-		    type.setName(newNazwa);
-		    type.setDescription(newOpis);
+		    type.setName(newName);
+		    type.setDescription(newDescription);
 		    return true;
 		}
 
@@ -178,8 +178,8 @@ public class Service {
     // ------------------- BIKE -------------------
 
     public static void addBike(List<Bike> bikes, Types type, String marka, String model,
-                               String rozmiarKola, String opis, int pricePerH) {
-        Bike bike = new Bike(type, marka, model, rozmiarKola, opis, pricePerH);
+                               String wheelSize, String description, int pricePerH) {
+        Bike bike = new Bike(type, marka, model, wheelSize, description, pricePerH);
         bikes.add(bike);
     }
 
@@ -204,8 +204,8 @@ public class Service {
 
     // ------------------- TYPES -------------------
 
-    public static void addType(List<Types> types, String nazwa, String opis) {
-        Types type = new Types(nazwa, opis);
+    public static void addType(List<Types> types, String name, String description) {
+        Types type = new Types(name, description);
         types.add(type);
     }
 

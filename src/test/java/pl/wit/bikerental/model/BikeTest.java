@@ -26,10 +26,10 @@ class BikeTest {
 
         assertEquals("B1", bike.getId());
         assertEquals("Górski", bike.getType().getName());
-        assertEquals("Kross", bike.getMarka());
+        assertEquals("Kross", bike.getBrand());
         assertEquals("Level 5.0", bike.getModel());
-        assertEquals("29", bike.getRozmiarKola());
-        assertEquals("Aluminiowa rama, amortyzator", bike.getOpis());
+        assertEquals("29", bike.getWheelSize());
+        assertEquals("Aluminiowa rama, amortyzator", bike.getDescription());
         assertEquals(25, bike.getPricePerH());
         assertFalse(bike.isRented());
     }
@@ -41,10 +41,10 @@ class BikeTest {
 
         assertEquals("B99", bike.getId());
         assertEquals("Miejski", bike.getType().getName());
-        assertEquals("Romet", bike.getMarka());
+        assertEquals("Romet", bike.getBrand());
         assertEquals("City Bike", bike.getModel());
-        assertEquals("28", bike.getRozmiarKola());
-        assertEquals("Koszyk, błotniki", bike.getOpis());
+        assertEquals("28", bike.getWheelSize());
+        assertEquals("Koszyk, błotniki", bike.getDescription());
         assertEquals(18, bike.getPricePerH());
         assertTrue(bike.isRented());
     }
@@ -56,18 +56,18 @@ class BikeTest {
 
         Types trekkingowy = new Types("Trekkingowy", "Rower do długich tras");
         bike.setType(trekkingowy);
-        bike.setMarka("Trek");
+        bike.setBrand("Trek");
         bike.setModel("FX 3");
-        bike.setRozmiarKola("28");
-        bike.setOpis("Zmieniony opis");
+        bike.setWheelSize("28");
+        bike.setDescription("Zmieniony opis");
         bike.setPricePerH(35);
         bike.setRented(true);
 
         assertEquals("Trekkingowy", bike.getType().getName());
-        assertEquals("Trek", bike.getMarka());
+        assertEquals("Trek", bike.getBrand());
         assertEquals("FX 3", bike.getModel());
-        assertEquals("28", bike.getRozmiarKola());
-        assertEquals("Zmieniony opis", bike.getOpis());
+        assertEquals("28", bike.getWheelSize());
+        assertEquals("Zmieniony opis", bike.getDescription());
         assertEquals(35, bike.getPricePerH());
         assertTrue(bike.isRented());
     }

@@ -9,6 +9,7 @@ import java.util.Map;
 import pl.wit.bikerental.model.Bike;
 import pl.wit.bikerental.model.Client;
 import pl.wit.bikerental.model.Rental;
+import pl.wit.bikerental.model.Types;
 
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -19,15 +20,17 @@ public class MainFrame extends JFrame {
     private List<Bike> bikes;
     private List<Client> clients;
     private List<Rental> rentals;
+    private List<Types> types;
 
     private JTable bikeTable;
     private JTable clientTable;
     private JTable rentalTable;
 
-    public MainFrame(List<Bike> bikes, List<Client> clients, List<Rental> rentals) {
+    public MainFrame(List<Bike> bikes, List<Client> clients, List<Rental> rentals, List<Types> types) {
         this.bikes = bikes;
         this.clients = clients;
         this.rentals = rentals;
+        this.types = types;
 
         setTitle("Wypożyczalnia rowerów");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -82,20 +85,20 @@ public class MainFrame extends JFrame {
     private JPanel createBikeButtonPanel() {
         JPanel panel = createVerticalButtonPanel(
             "Nowy rower",
-            "Pokaż wszystkie rowery",
-            "Pokaż dostępne rowery",
-            "Pokaż rowery na wypożyczeniu",
             "Edytuj rower",
             "Usuń rower",
             "Nowy typ roweru",
             "Edytuj typ roweru",
-            "Usuń typ roweru"
+            "Usuń typ roweru",
+            "Pokaż wszystkie rowery",
+            "Pokaż dostępne rowery",
+            "Pokaż rowery na wypożyczeniu"
         );
 
         final JFrame parent = this;
 
         Map<String, Runnable> actions = new HashMap<>();
-        actions.put("Nowy rower", () -> new AddBikeForm(parent).setVisible(true));
+        actions.put("Nowy rower", () -> new AddBikeForm(parent, this.bikes, this.types).setVisible(true));
         actions.put("Pokaż wszystkie rowery", () -> JOptionPane.showMessageDialog(parent, "Pokazuje wszystkie rowery na głównym panelu niezależnie od statusu"));
         actions.put("Pokaż dostępne rowery", () -> JOptionPane.showMessageDialog(parent, "Pokazuje rowery na głównym panelu, gdzie Status = Dostępny (czy tam isRented = false)"));
         actions.put("Pokaż rowery na wypożyczeniu", () -> JOptionPane.showMessageDialog(parent, "Pokazuje na głównym panelu rowery, które są aktualnie wypożyczone"));
@@ -182,20 +185,19 @@ public class MainFrame extends JFrame {
     }
 
     private JTable createBikeTable() {
-        String[] cols = {"ID", "Nazwa", "Typ", "Marka", "Model", "Rozmiar koła", "Opis", "Cena za h", "Status"};
+        String[] cols = {"ID", "Typ", "Marka", "Model", "Rozmiar koła", "Opis", "Cena za godzine", "Stan"};
         Object[][] data = new Object[bikes.size()][cols.length];
 
         for (int i = 0; i < bikes.size(); i++) {
             Bike b = bikes.get(i);
-            data[i][0] = i + 1;
-            data[i][1] = b.getModel();
-            data[i][2] = b.getType().getName();
-            data[i][3] = b.getMarka();
-            data[i][4] = b.getModel();
-            data[i][5] = b.getRozmiarKola();
-            data[i][6] = b.getOpis();
-            data[i][7] = b.getPricePerH();
-            data[i][8] = b.isRented() ? "Wypożyczony" : "Dostępny";
+            data[i][0] = b.getId();
+            data[i][1] = b.getType().getName();
+            data[i][2] = b.getBrand();
+            data[i][3] = b.getModel();
+            data[i][4] = b.getWheelSize();
+            data[i][5] = b.getDescription();
+            data[i][6] = b.getPricePerH();
+            data[i][7] = b.isRented() ? "Wypożyczony" : "Dostępny";
         }
 
         return new JTable(data, cols);
@@ -207,7 +209,7 @@ public class MainFrame extends JFrame {
 
         for (int i = 0; i < clients.size(); i++) {
             Client c = clients.get(i);
-            data[i][0] = i + 1;
+            data[i][0] = c.getId();
             data[i][1] = c.getFirstName();
             data[i][2] = c.getLastName();
             data[i][3] = c.getPhoneNumber();
@@ -218,12 +220,13 @@ public class MainFrame extends JFrame {
     }
 
     private JTable createRentalTable() {
-        String[] cols = {"ID", "Klient", "Rower", "Od", "Do", "Status", "Data zwrotu"};
+    	
+        String[] cols = {"ID", "Klient", "Rower", "Od", "Do", "Stan", "Data zwrotu"};
         Object[][] data = new Object[rentals.size()][cols.length];
 
         for (int i = 0; i < rentals.size(); i++) {
             Rental r = rentals.get(i);
-            data[i][0] = i + 1;
+            data[i][0] = r.getId();
             data[i][1] = r.getClient().getFirstName() + " " + r.getClient().getLastName();
             data[i][2] = r.getBike().getModel();
             data[i][3] = r.getStart().toString();
@@ -262,4 +265,6 @@ public class MainFrame extends JFrame {
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         return button;
     }
+    
+    
 }
