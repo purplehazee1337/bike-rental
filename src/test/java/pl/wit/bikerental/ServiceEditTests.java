@@ -57,10 +57,10 @@ class ServiceEditTests {
         assertTrue(result);
 
         Bike editedBike = Service.findBikeById(bikes, testBike.getId());
-        assertEquals("Trek", editedBike.getMarka());
+        assertEquals("Trek", editedBike.getBrand());
         assertEquals("Marlin 7", editedBike.getModel());
-        assertEquals("27.5\"", editedBike.getRozmiarKola());
-        assertEquals("Updated bike", editedBike.getOpis());
+        assertEquals("27.5\"", editedBike.getWheelSize());
+        assertEquals("Updated bike", editedBike.getDescription());
         assertEquals(25, editedBike.getPricePerH());
     }
 

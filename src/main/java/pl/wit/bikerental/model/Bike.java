@@ -4,21 +4,21 @@ public class Bike {
     private static int idCount = 0; // tracks next ID
     private final String id;
     private Types type;
-    private String marka;
+    private String brand;
     private String model;
-    private String rozmiarKola;
-    private String opis;
+    private String wheelSize;
+    private String description;
     private int pricePerH;
     private boolean isRented;
 
     // Constructor for new bikes (ID auto-generated)
-    public Bike(Types type, String marka, String model, String rozmiarKola, String opis, int pricePerH) {
+    public Bike(Types type, String brand, String model, String wheelSize, String description, int pricePerH) {
         this.id = "B" + (++idCount);
         this.type = type;
-        this.marka = marka;
+        this.brand = brand;
         this.model = model;
-        this.rozmiarKola = rozmiarKola;
-        this.opis = opis;
+        this.wheelSize = wheelSize;
+        this.description = description;
         this.pricePerH = pricePerH;
         this.isRented = false;
     }
@@ -27,10 +27,10 @@ public class Bike {
     public Bike(String id, Types type, String marka, String model, String rozmiarKola, String opis, int pricePerH, boolean isRented) {
         this.id = id;
         this.type = type;
-        this.marka = marka;
+        this.brand = marka;
         this.model = model;
-        this.rozmiarKola = rozmiarKola;
-        this.opis = opis;
+        this.wheelSize = rozmiarKola;
+        this.description = opis;
         this.pricePerH = pricePerH;
         this.isRented = isRented;
     }
@@ -55,12 +55,12 @@ public class Bike {
 		this.type = type;
 	}
 
-	public String getMarka() {
-		return marka;
+	public String getBrand() {
+		return brand;
 	}
 
-	public void setMarka(String marka) {
-		this.marka = marka;
+	public void setBrand(String marka) {
+		this.brand = marka;
 	}
 
 	public String getModel() {
@@ -71,20 +71,20 @@ public class Bike {
 		this.model = model;
 	}
 
-	public String getRozmiarKola() {
-		return rozmiarKola;
+	public String getWheelSize() {
+		return wheelSize;
 	}
 
-	public void setRozmiarKola(String rozmiarKola) {
-		this.rozmiarKola = rozmiarKola;
+	public void setWheelSize(String rozmiarKola) {
+		this.wheelSize = rozmiarKola;
 	}
 
-	public String getOpis() {
-		return opis;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setOpis(String opis) {
-		this.opis = opis;
+	public void setDescription(String opis) {
+		this.description = opis;
 	}
 
 	public int getPricePerH() {

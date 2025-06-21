@@ -20,6 +20,10 @@ public class Types {
         this.name = nazwa;
         this.description = opis;
     }
+    
+    public String toString() {
+        return this.name; // Or whatever field represents the name
+    }
 
 	public static int getTypeIdCount() {
 		return typeIdCount;

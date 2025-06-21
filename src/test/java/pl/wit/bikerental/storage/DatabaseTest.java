@@ -66,10 +66,10 @@ class DatabaseTest {
 
         // Sprawdź pierwszy rower
         Bike loadedBike = loaded.bikes.get(0);
-        assertEquals("Kross", loadedBike.getMarka());
+        assertEquals("Kross", loadedBike.getBrand());
         assertEquals("Level 5.0", loadedBike.getModel());
-        assertEquals("29", loadedBike.getRozmiarKola());
-        assertEquals("Aluminiowa rama", loadedBike.getOpis());
+        assertEquals("29", loadedBike.getWheelSize());
+        assertEquals("Aluminiowa rama", loadedBike.getDescription());
         assertEquals(25, loadedBike.getPricePerH());
         assertEquals("Górski", loadedBike.getType().getName());
     }

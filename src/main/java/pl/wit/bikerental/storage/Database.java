@@ -77,10 +77,10 @@ public class Database {
 	            int typeIndex = types.indexOf(bike.getType());
 	            dos.writeInt(typeIndex); // Save index, not full object
 
-	            dos.writeUTF(bike.getMarka());
+	            dos.writeUTF(bike.getBrand());
 	            dos.writeUTF(bike.getModel());
-	            dos.writeUTF(bike.getRozmiarKola());
-	            dos.writeUTF(bike.getOpis());
+	            dos.writeUTF(bike.getWheelSize());
+	            dos.writeUTF(bike.getDescription());
 	            dos.writeInt(bike.getPricePerH());
 	            dos.writeBoolean(bike.isRented());
 	        }
