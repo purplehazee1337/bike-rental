@@ -2,7 +2,10 @@ package pl.wit.bikerental.ui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import pl.wit.bikerental.model.Bike;
 import pl.wit.bikerental.model.Client;
 import pl.wit.bikerental.model.Rental;
@@ -77,9 +80,10 @@ public class MainFrame extends JFrame {
     }
 
     private JPanel createBikeButtonPanel() {
-        return createVerticalButtonPanel(
+        JPanel panel = createVerticalButtonPanel(
             "Nowy rower",
-            "Pokaż niezwrócone rowery",
+            "Pokaż wszystkie rowery",
+            "Pokaż dostępne rowery",
             "Pokaż rowery na wypożyczeniu",
             "Edytuj rower",
             "Usuń rower",
@@ -87,21 +91,83 @@ public class MainFrame extends JFrame {
             "Edytuj typ roweru",
             "Usuń typ roweru"
         );
+
+        final JFrame parent = this;
+
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put("Nowy rower", () -> new AddBikeForm(parent).setVisible(true));
+        actions.put("Pokaż wszystkie rowery", () -> JOptionPane.showMessageDialog(parent, "Pokazuje wszystkie rowery na głównym panelu niezależnie od statusu"));
+        actions.put("Pokaż dostępne rowery", () -> JOptionPane.showMessageDialog(parent, "Pokazuje rowery na głównym panelu, gdzie Status = Dostępny (czy tam isRented = false)"));
+        actions.put("Pokaż rowery na wypożyczeniu", () -> JOptionPane.showMessageDialog(parent, "Pokazuje na głównym panelu rowery, które są aktualnie wypożyczone"));
+        actions.put("Edytuj rower", () -> new EditBikeForm(parent).setVisible(true));
+        actions.put("Usuń rower", () -> new DeleteBikeForm(parent).setVisible(true));
+        actions.put("Nowy typ roweru", () -> new AddTypeForm(parent).setVisible(true));
+        actions.put("Edytuj typ roweru", () -> new EditTypeForm(parent).setVisible(true));
+        actions.put("Usuń typ roweru", () -> new DeleteTypeForm(parent).setVisible(true));
+
+        for (Component c : panel.getComponents()) {
+            if (c instanceof JButton) {
+                JButton button = (JButton) c;
+                Runnable action = actions.get(button.getText());
+                if (action != null) {
+                    button.addActionListener(e -> action.run());
+                }
+            }
+        }
+
+        return panel;
     }
 
     private JPanel createClientButtonPanel() {
-        return createVerticalButtonPanel(
+        JPanel panel = createVerticalButtonPanel(
             "Nowy klient",
             "Edytuj klienta",
             "Usuń klienta"
         );
+
+        final JFrame parent = this;
+
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put("Nowy klient", () -> new AddClientForm(parent).setVisible(true));
+        actions.put("Edytuj klienta", () -> new EditClientForm(parent).setVisible(true));
+        actions.put("Usuń klienta", () -> new DeleteClientForm(parent).setVisible(true));
+
+        for (Component c : panel.getComponents()) {
+            if (c instanceof JButton) {
+                JButton button = (JButton) c;
+                Runnable action = actions.get(button.getText());
+                if (action != null) {
+                    button.addActionListener(e -> action.run());
+                }
+            }
+        }
+
+        return panel;
     }
 
     private JPanel createRentalButtonPanel() {
-        return createVerticalButtonPanel(
+        JPanel panel = createVerticalButtonPanel(
             "Nowe wypożyczenie",
             "Zwróć wypożyczenie"
         );
+
+        final JFrame parent = this;
+
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put("Nowe wypożyczenie", () -> new AddRentalForm(parent).setVisible(true));
+        actions.put("Zwróć wypożyczenie", () -> new ReturnRentalForm(parent).setVisible(true));
+
+        for (Component c : panel.getComponents()) {
+            if (c instanceof JButton) {
+                JButton button = (JButton) c;
+                Runnable action = actions.get(button.getText());
+                if (action != null) {
+                    button.addActionListener(e -> action.run());
+                }
+            }
+        }
+
+        return panel;
     }
 
     private JPanel createVerticalButtonPanel(String... buttonNames) {
