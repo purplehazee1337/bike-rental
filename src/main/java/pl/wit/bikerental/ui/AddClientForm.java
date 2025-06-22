@@ -3,8 +3,12 @@ package pl.wit.bikerental.ui;
 import javax.swing.*;
 import java.awt.*;
 
+import pl.wit.bikerental.model.Client;
+import pl.wit.bikerental.service.Service;
+import java.util.List;
+
 public class AddClientForm extends JDialog {
-    public AddClientForm(JFrame parent) {
+    public AddClientForm(JFrame parent, List<Client> clients) {
         super(parent, "Nowy klient", true);
         setSize(400, 260);
         setLocationRelativeTo(parent);
@@ -52,7 +56,26 @@ public class AddClientForm extends JDialog {
         buttonPanel.add(addButton);
         buttonPanel.add(cancelButton);
 
-        addButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Nowy klient został dodany."));
+        addButton.addActionListener(e -> {
+        	try {
+	            String firstName = firstNameField.getText().trim();
+	            String lastName = lastNameField.getText().trim();
+	            String phoneNumber = phoneField.getText().trim();
+	            String email = emailField.getText().trim();
+	            
+	            if (firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty() || email.isEmpty()) {
+	                throw new IllegalArgumentException();
+	            }
+	            
+	            Service.addClient(clients, firstName, lastName, phoneNumber, email);
+	            
+	            ((MainFrame) parent).refreshTables(); // refresh data
+	            dispose(); // zamknij formularz po dodaniu
+	            
+        	} catch(Exception error) {
+        		JOptionPane.showMessageDialog(parent, "Niepoprawne dane.");
+        	}
+        });
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);

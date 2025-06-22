@@ -3,8 +3,13 @@ package pl.wit.bikerental.ui;
 import javax.swing.*;
 import java.awt.*;
 
+import pl.wit.bikerental.model.Types;
+import pl.wit.bikerental.service.Service;
+
+import java.util.List;
+
 public class EditTypeForm extends JDialog {
-    public EditTypeForm(JFrame parent) {
+    public EditTypeForm(JFrame parent, List<Types> types) {
         super(parent, "Edytuj typ roweru", true);
         setSize(380, 250);
         setLocationRelativeTo(parent);
@@ -16,7 +21,10 @@ public class EditTypeForm extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
-        JComboBox<Integer> idCombo = new JComboBox<>();
+        JComboBox<String> idCombo = new JComboBox<>();
+        for (Types t : types) {
+            idCombo.addItem(t.getId());
+        }
         JTextField nameField = new JTextField(20);
         JTextArea descArea = new JTextArea(3, 20);
 
@@ -44,7 +52,26 @@ public class EditTypeForm extends JDialog {
         buttonPanel.add(updateButton);
         buttonPanel.add(cancelButton);
 
-        updateButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Typ roweru został edytowany."));
+        updateButton.addActionListener(e -> {
+        	try {
+        		
+        		String id = (String) idCombo.getSelectedItem();
+	            String name = nameField.getText().trim();
+	            String description = descArea.getText().trim();
+	
+	            if (name.isEmpty() || description.isEmpty()) {
+	                throw new IllegalArgumentException();
+	            }
+	            
+	            Service.editTypeById(types, id, name, description);
+	            
+	            ((MainFrame) parent).refreshTables(); // refresh data
+	            dispose(); // zamknij formularz po edycji
+	            
+        	} catch(Exception error) {
+        		JOptionPane.showMessageDialog(parent, "Niepoprawne dane.");
+        	}
+        });
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);

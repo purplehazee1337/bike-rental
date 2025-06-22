@@ -3,8 +3,13 @@ package pl.wit.bikerental.ui;
 import javax.swing.*;
 import java.awt.*;
 
+import pl.wit.bikerental.model.Types;
+import pl.wit.bikerental.service.Service;
+
+import java.util.List;
+
 public class AddTypeForm extends JDialog {
-    public AddTypeForm(JFrame parent) {
+    public AddTypeForm(JFrame parent, List<Types> types) {
         super(parent, "Nowy typ roweru", true);
         setSize(350, 240);
         setLocationRelativeTo(parent);
@@ -37,7 +42,24 @@ public class AddTypeForm extends JDialog {
         buttonPanel.add(addButton);
         buttonPanel.add(cancelButton);
 
-        addButton.addActionListener(e -> JOptionPane.showMessageDialog(this, "Typ roweru został dodany."));
+        addButton.addActionListener(e -> {
+        	try {
+	            String name = nameField.getText().trim();
+	            String description = descArea.getText().trim();
+	
+	            if (name.isEmpty() || description.isEmpty()) {
+	                throw new IllegalArgumentException();
+	            }
+	            
+	            Service.addType(types, name, description);
+	            
+	            ((MainFrame) parent).refreshTables(); // refresh data
+	            dispose(); // zamknij formularz po dodaniu
+	            
+        	} catch(Exception error) {
+        		JOptionPane.showMessageDialog(parent, "Niepoprawne dane.");
+        	}
+        });
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
