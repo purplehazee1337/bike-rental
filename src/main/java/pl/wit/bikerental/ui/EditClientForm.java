@@ -7,7 +7,21 @@ import pl.wit.bikerental.model.Client;
 import pl.wit.bikerental.service.Service;
 import java.util.List;
 
+/**
+ * Dialog window that allows editing of an existing client's data based on their ID.
+ * The form provides input fields for the client's personal information such as
+ * first name, last name, phone number, and email.
+ */
 public class EditClientForm extends JDialog {
+	
+	/**
+     * Constructs a modal dialog used to update client information.
+     * Allows selecting a client by ID and editing their attributes.
+     * Changes are persisted using the service layer.
+     *
+     * @param parent  The parent JFrame that owns this dialog.
+     * @param clients The list of existing clients to be updated.
+     */
     public EditClientForm(JFrame parent, List<Client> clients) {
         super(parent, "Edytuj klienta", true);
         setSize(400, 300);
@@ -21,6 +35,7 @@ public class EditClientForm extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
+        // ComboBoxes and input fields
         JComboBox<String> idCombo = new JComboBox<>();
         for (Client c : clients) {
             idCombo.addItem(c.getId());
@@ -30,6 +45,7 @@ public class EditClientForm extends JDialog {
         JTextField phoneField = new JTextField(20);
         JTextField emailField = new JTextField(20);
 
+        // Form layout
         gbc.gridx = 0; gbc.gridy = 0;
         formPanel.add(new JLabel("ID klienta:"), gbc);
         gbc.gridx = 1;
@@ -55,12 +71,14 @@ public class EditClientForm extends JDialog {
         gbc.gridx = 1;
         formPanel.add(emailField, gbc);
 
+        // Buttons
         JPanel buttonPanel = new JPanel();
         JButton updateButton = new JButton("Zmień");
         JButton cancelButton = new JButton("Anuluj");
         buttonPanel.add(updateButton);
         buttonPanel.add(cancelButton);
 
+        // Update logic
         updateButton.addActionListener(e -> {
         	try {
         		String id = (String) idCombo.getSelectedItem();
@@ -75,8 +93,8 @@ public class EditClientForm extends JDialog {
 	            
 	            Service.editClientById(clients, id, firstName, lastName, phoneNumber, email);
 	            
-	            ((MainFrame) parent).refreshTables(); // refresh data
-	            dispose(); // zamknij formularz po edycji
+	            ((MainFrame) parent).refreshTables(); // Refresh table data
+	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {
                 JOptionPane.showMessageDialog(parent, "Wprowadzono niepoprawne dane.", "Missing Data", JOptionPane.WARNING_MESSAGE);
@@ -84,6 +102,8 @@ public class EditClientForm extends JDialog {
                 JOptionPane.showMessageDialog(parent, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+        
+        // Close form without changes
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
