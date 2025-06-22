@@ -7,9 +7,22 @@ import pl.wit.bikerental.model.Rental;
 import pl.wit.bikerental.service.Service;
 import java.util.List;
 
+/**
+ * Dialog window allowing the user to mark a rental as completed (returned).
+ * The user selects a rental by ID from a dropdown list and confirms the return.
+ */
 public class ReturnRentalForm extends JDialog {
+	
+	/** Dropdown list for selecting the rental ID to be marked as returned. */
     private JComboBox<String> rentalIdComboBox;
 
+    /**
+     * Constructs a modal dialog for returning a rental.
+     * Allows the user to select a rental by ID and mark it as completed.
+     *
+     * @param parent   The parent frame to which this dialog is modal.
+     * @param rentals  The list of existing rentals in the system.
+     */
     public ReturnRentalForm(JFrame parent, List<Rental> rentals) {
         super(parent, "Zwróć wypożyczenie", true);
         setSize(300, 160);
@@ -21,6 +34,7 @@ public class ReturnRentalForm extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
+        // Form layout
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(new JLabel("ID wypożyczenia:"), gbc);
@@ -32,6 +46,7 @@ public class ReturnRentalForm extends JDialog {
         }
         panel.add(rentalIdComboBox, gbc);
 
+        // Return button
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;
@@ -39,13 +54,14 @@ public class ReturnRentalForm extends JDialog {
         JButton returnButton = new JButton("Zwróć");
         panel.add(returnButton, gbc);
 
+        // Return logic
         returnButton.addActionListener(e -> {
         	try {
                 String id = (String) rentalIdComboBox.getSelectedItem();
                 
                 Service.completeRental(rentals, id);
-                ((MainFrame) parent).refreshTables(); // refresh data
-                dispose(); // zamknij formularz po dodaniu
+                ((MainFrame) parent).refreshTables(); // Refresh table data
+                dispose(); // Close the form
                 
         	} catch (IllegalArgumentException ex) {
                 JOptionPane.showMessageDialog(parent, "Wprowadzono niepoprawne dane.", "Missing Data", JOptionPane.WARNING_MESSAGE);

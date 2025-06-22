@@ -8,7 +8,20 @@ import pl.wit.bikerental.service.Service;
 
 import java.util.List;
 
+/**
+ * Dialog window that allows editing of an existing bike type by specifying its ID.
+ * Provides input fields for the type's name and description.
+ */
 public class EditTypeForm extends JDialog {
+	
+	/**
+     * Constructs a modal dialog for editing the attributes of a bike type.
+     * Allows selecting a type by ID and modifying its name and description.
+     * Changes are saved through the service layer.
+     *
+     * @param parent The parent frame to which this dialog is modal.
+     * @param types  The list of bike types available in the system.
+     */
     public EditTypeForm(JFrame parent, List<Types> types) {
         super(parent, "Edytuj typ roweru", true);
         setSize(380, 250);
@@ -21,6 +34,7 @@ public class EditTypeForm extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
+        // ComboBoxes and input fields
         JComboBox<String> idCombo = new JComboBox<>();
         for (Types t : types) {
             idCombo.addItem(t.getId());
@@ -28,6 +42,7 @@ public class EditTypeForm extends JDialog {
         JTextField nameField = new JTextField(20);
         JTextArea descArea = new JTextArea(3, 20);
 
+        // Form layout
         gbc.gridx = 0;
         gbc.gridy = 0;
         formPanel.add(new JLabel("ID typu:"), gbc);
@@ -46,12 +61,14 @@ public class EditTypeForm extends JDialog {
         gbc.gridx = 1;
         formPanel.add(new JScrollPane(descArea), gbc);
 
+        // Buttons
         JPanel buttonPanel = new JPanel();
         JButton updateButton = new JButton("Zmień");
         JButton cancelButton = new JButton("Anuluj");
         buttonPanel.add(updateButton);
         buttonPanel.add(cancelButton);
 
+        // Update logic
         updateButton.addActionListener(e -> {
         	try {
         		
@@ -65,8 +82,8 @@ public class EditTypeForm extends JDialog {
 	            
 	            Service.editTypeById(types, id, name, description);
 	            
-	            ((MainFrame) parent).refreshTables(); // refresh data
-	            dispose(); // zamknij formularz po edycji
+	            ((MainFrame) parent).refreshTables(); // Refresh table data
+	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {
                 JOptionPane.showMessageDialog(parent, "Wprowadzono niepoprawne dane.", "Missing Data", JOptionPane.WARNING_MESSAGE);
@@ -74,6 +91,8 @@ public class EditTypeForm extends JDialog {
                 JOptionPane.showMessageDialog(parent, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+
+        // Close form without changes
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
