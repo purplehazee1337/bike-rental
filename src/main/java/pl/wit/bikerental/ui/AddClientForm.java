@@ -72,9 +72,11 @@ public class AddClientForm extends JDialog {
 	            ((MainFrame) parent).refreshTables(); // refresh data
 	            dispose(); // zamknij formularz po dodaniu
 	            
-        	} catch(Exception error) {
-        		JOptionPane.showMessageDialog(parent, "Niepoprawne dane.");
-        	}
+        	} catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(parent, "Wprowadzono niepoprawne dane.", "Missing Data", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(parent, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
         cancelButton.addActionListener(e -> dispose());
 

@@ -107,7 +107,7 @@ public class MainFrame extends JFrame {
         actions.put("Usuń rower", () -> new DeleteBikeForm(parent, this.bikes, this.rentals).setVisible(true));
         actions.put("Nowy typ roweru", () -> new AddTypeForm(parent, this.types).setVisible(true));
         actions.put("Edytuj typ roweru", () -> new EditTypeForm(parent, this.types).setVisible(true));
-        actions.put("Usuń typ roweru", () -> new DeleteTypeForm(parent, this.types).setVisible(true));
+        actions.put("Usuń typ roweru", () -> new DeleteTypeForm(parent, this.types, this.bikes).setVisible(true));
 
         for (Component c : panel.getComponents()) {
             if (c instanceof JButton) {

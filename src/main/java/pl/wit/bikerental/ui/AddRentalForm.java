@@ -91,13 +91,15 @@ public class AddRentalForm extends JDialog {
             LocalDateTime fromDate = LocalDateTime.parse(fromDateStr, formatter);
             LocalDateTime toDate = LocalDateTime.parse(toDateStr, formatter);
             
-            Service.newRental(rentals, bikes, clients, bikeId, clientId, fromDate);
+            Service.newRental(rentals, bikes, clients, bikeId, clientId, fromDate, toDate);
             ((MainFrame) parent).refreshTables(); // refresh data
             dispose(); // zamknij formularz po dodaniu
             
-    	} catch(Exception error) {
-    		JOptionPane.showMessageDialog(parent, "Błąd.");
-    	}
+    	} catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(parent, "Wprowadzono niepoprawne dane.", "Missing Data", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(parent, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
 	});
         
 
