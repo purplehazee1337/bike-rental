@@ -5,7 +5,6 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import pl.wit.bikerental.model.Bike;
 import pl.wit.bikerental.model.Client;
@@ -92,6 +91,7 @@ public class MainFrame extends JFrame {
             "Nowy typ roweru",
             "Edytuj typ roweru",
             "Usuń typ roweru",
+            "Pokaż wszystkie typy rowerów",
             "Pokaż wszystkie rowery",
             "Pokaż dostępne rowery",
             "Pokaż rowery na wypożyczeniu",
@@ -111,6 +111,7 @@ public class MainFrame extends JFrame {
         actions.put("Nowy typ roweru", () -> new AddTypeForm(parent, this.types).setVisible(true));
         actions.put("Edytuj typ roweru", () -> new EditTypeForm(parent, this.types).setVisible(true));
         actions.put("Usuń typ roweru", () -> new DeleteTypeForm(parent, this.types, this.bikes).setVisible(true));
+        actions.put("Pokaż wszystkie typy rowerów", () -> showBikeTypesTable(this.types));
 
         for (Component c : panel.getComponents()) {
             if (c instanceof JButton) {
@@ -142,6 +143,23 @@ public class MainFrame extends JFrame {
         }
 
         centerCardPanel.remove(0);
+        bikeTable = new JTable(data, cols);
+        centerCardPanel.add(new JScrollPane(bikeTable), "rowery", 0);
+        switchCard("rowery");
+    }
+    
+    private void showBikeTypesTable(List<Types> allTypes) {
+    	String[] cols = {"ID", "Nazwa", "Opis"};
+    	Object[][] data = new Object[allTypes.size()][cols.length];
+    	
+    	for(int i = 0; i < allTypes.size(); i++) {
+    		Types t = allTypes.get(i);
+    		data[i][0] = t.getId();
+    		data[i][1] = t.getName();
+    		data[i][2] = t.getDescription();
+    	}
+    	
+    	centerCardPanel.remove(0);
         bikeTable = new JTable(data, cols);
         centerCardPanel.add(new JScrollPane(bikeTable), "rowery", 0);
         switchCard("rowery");

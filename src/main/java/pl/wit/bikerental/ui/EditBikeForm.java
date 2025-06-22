@@ -1,6 +1,5 @@
 package pl.wit.bikerental.ui;
 
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -9,7 +8,22 @@ import pl.wit.bikerental.model.Types;
 import pl.wit.bikerental.service.Service;
 import java.util.List;
 
+/**
+ * Dialog window that allows the user to edit an existing bike's data based on its ID.
+ * The form enables modification of bike attributes such as type, brand, model,
+ * wheel size, price per hour, and description.
+ */
 public class EditBikeForm extends JDialog {
+	
+	/**
+     * Constructs a modal dialog for editing a bike's properties.
+     * Provides dropdown to select the bike by ID and fields to update its information.
+     * Uses the service layer to persist changes.
+     *
+     * @param parent The parent JFrame that owns this dialog.
+     * @param bikes  The list of existing bikes to be updated.
+     * @param types  The list of available bike types for selection.
+     */
     public EditBikeForm(JFrame parent, List<Bike> bikes, List<Types> types) {
         super(parent, "Edytuj rower", true);
         setSize(380, 400);
@@ -22,6 +36,7 @@ public class EditBikeForm extends JDialog {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
+        // ComboBoxes and input fields
         JComboBox<String> idCombo = new JComboBox<>();
         for (Bike b : bikes) {
             idCombo.addItem(b.getId());
@@ -36,6 +51,7 @@ public class EditBikeForm extends JDialog {
         JTextField pricePerH = new JTextField(20);
         JTextArea bikeDescArea = new JTextArea(3, 20);
 
+        // Form layout
         gbc.gridx = 0; gbc.gridy = 0;
         formPanel.add(new JLabel("ID roweru:"), gbc);
         gbc.gridx = 1;
@@ -71,12 +87,14 @@ public class EditBikeForm extends JDialog {
         gbc.gridx = 1;
         formPanel.add(new JScrollPane(bikeDescArea), gbc);
 
+        // Buttons
         JPanel buttonPanel = new JPanel();
         JButton updateButton = new JButton("Zmień");
         JButton cancelButton = new JButton("Anuluj");
         buttonPanel.add(updateButton);
         buttonPanel.add(cancelButton);
 
+        // Update logic
         updateButton.addActionListener(e -> {
         	try {
         		String id = (String) idCombo.getSelectedItem();
@@ -94,8 +112,8 @@ public class EditBikeForm extends JDialog {
 	            Service.editBikeById(bikes, id, brand, model, wheelSize, description, price);
 	            Service.findBikeById(bikes, id).setType(type);
 	            
-	            ((MainFrame) parent).refreshTables(); // refresh data
-	            dispose(); // zamknij formularz po edycji
+	            ((MainFrame) parent).refreshTables(); // Refresh table data
+	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {
                 JOptionPane.showMessageDialog(parent, "Wprowadzono niepoprawne dane.", "Missing Data", JOptionPane.WARNING_MESSAGE);
@@ -103,6 +121,8 @@ public class EditBikeForm extends JDialog {
                 JOptionPane.showMessageDialog(parent, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
+        
+        // Close form without changes
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
