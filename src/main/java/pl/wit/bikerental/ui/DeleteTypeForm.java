@@ -3,13 +3,14 @@ package pl.wit.bikerental.ui;
 import javax.swing.*;
 import java.awt.*;
 
+import pl.wit.bikerental.model.Bike;
 import pl.wit.bikerental.model.Types;
 import pl.wit.bikerental.service.Service;
 
 import java.util.List;
 
 public class DeleteTypeForm extends JDialog {
-    public DeleteTypeForm(JFrame parent, List<Types> types) {
+    public DeleteTypeForm(JFrame parent, List<Types> types, List<Bike> bikes) {
         super(parent, "Usuń typ roweru", true);
         setSize(200, 160);
         setLocationRelativeTo(parent);
@@ -43,14 +44,16 @@ public class DeleteTypeForm extends JDialog {
         		
         		String id = (String) idCombo.getSelectedItem();
 	            
-	            Service.removeTypeById(types, id);
+	            Service.removeTypeById(types, id, bikes);
 	            
 	            ((MainFrame) parent).refreshTables(); // refresh data
 	            dispose(); // zamknij formularz po usunięciu
 	            
-        	} catch(Exception error) {
-        		JOptionPane.showMessageDialog(parent, "Typ nie został wybrany.");
-        	}
+        	} catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(parent, "Wprowadzono niepoprawne dane.", "Missing Data", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(parent, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
 
         cancelButton.addActionListener(e -> dispose());

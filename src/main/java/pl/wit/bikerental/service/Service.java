@@ -47,94 +47,90 @@ public class Service {
 	
 	// ------------------- EDIT METHODS -------------------
 
-		public static boolean editBikeById(List<Bike> bikes, String bikeId, String brand, String model,
-		                                   String wheelSize, String description, int pricePerH) {
+		public static void editBikeById(List<Bike> bikes, String bikeId, String brand, String model,
+		                                   String wheelSize, String description, int pricePerH) throws Exception {
 		    Bike bike = findBikeById(bikes, bikeId);
 		    if (bike == null) {
 		        System.out.println("Bike with ID " + bikeId + " not found.");
-		        return false;
+		        throw new Exception("Nie znaleziono roweru.");
 		    }
 		    bike.setBrand(brand);
 		    bike.setModel(model);
 		    bike.setWheelSize(wheelSize);
 		    bike.setDescription(description);
 		    bike.setPricePerH(pricePerH);
-		    return true;
 		}
 
-		public static boolean editClientById(List<Client> clients, String clientId, String firstName,
-		                                     String lastName, String phoneNumber, String email) {
+		public static void editClientById(List<Client> clients, String clientId, String firstName,
+		                                     String lastName, String phoneNumber, String email) throws Exception {
 		    Client client = findClientById(clients, clientId);
 		    if (client == null) {
 		        System.out.println("Client with ID " + clientId + " not found.");
-		        return false;
+		        throw new Exception("Nie znaleziono klienta.");
 		    }
 		    client.setFirstName(firstName);
 		    client.setLastName(lastName);
 		    client.setPhoneNumber(phoneNumber);
 		    client.setEmail(email);
-		    return true;
 		}
 
-		public static boolean editRentalById(List<Rental> rentals, String rentalId, LocalDateTime newStart,
-		                                     LocalDateTime newPlannedEnd) {
+		public static void editRentalById(List<Rental> rentals, String rentalId, LocalDateTime newStart,
+		                                     LocalDateTime newPlannedEnd) throws Exception {
 		    Rental rental = findRentalById(rentals, rentalId);
 		    if (rental == null) {
 		        System.out.println("Rental with ID " + rentalId + " not found.");
-		        return false;
+		        throw new Exception("Nie znaleziono wypożyczenia.");
 		    }
 		    rental.setStart(newStart);
 		    rental.setPlannedEnd(newPlannedEnd);
-		    return true;
 		}
 
-		public static boolean editTypeById(List<Types> types, String typeId, String newName, String newDescription) {
+		public static void editTypeById(List<Types> types, String typeId, String newName, String newDescription) throws Exception {
 		    Types type = findTypeById(types, typeId);
 		    if (type == null) {
 		        System.out.println("Type with ID " + typeId + " not found.");
-		        return false;
+		        throw new Exception("Nie znaleziono typu roweru.");
 		    }
 		    type.setName(newName);
 		    type.setDescription(newDescription);
-		    return true;
 		}
 
 
     // ------------------- RENTAL -------------------
 
 	public static void newRental(List<Rental> rentals, List<Bike> bikes, List<Client> clients,
-            String bikeId, String clientId, LocalDateTime plannedEnd) {
+            String bikeId, String clientId, LocalDateTime start, LocalDateTime plannedEnd) throws Exception {
 		Bike bike = findBikeById(bikes, bikeId);
 		Client client = findClientById(clients, clientId);
 		
 		if (bike == null) {
 		System.out.println("Bike with ID " + bikeId + " not found.");
-		return;
+		throw new Exception("Nie znaleziono roweru.");
 		}
 		
 		if (client == null) {
 		System.out.println("Client with ID " + clientId + " not found.");
-		return;
+		throw new Exception("Nie znaleziono klienta.");
 		}
 		
 		if (bike.isRented()) {
 		System.out.println("Bike " + bike.getId() + " is already rented.");
-		return;
+		throw new Exception("Rower jest już wypożyczony.");
 		}
 		
-		Rental rental = new Rental(client, bike, plannedEnd, plannedEnd);
+		Rental rental = new Rental(client, bike, start, plannedEnd);
 		rentals.add(rental);
 		bike.setRented(true);
 		System.out.println("Rental created successfully: " + rental.getId());
 		}
 
 
-	public static void completeRental(List<Rental> rentals, String rentalId) {
+	public static void completeRental(List<Rental> rentals, String rentalId) throws Exception {
 	    Rental rental = findRentalById(rentals, rentalId);
 	    if (rental != null) {
 	        if (rental.isReturned()) {
 	            System.out.println("Rental " + rentalId + " has already been returned.");
-	            return;
+	            throw new Exception("Wypożyczenie jest już zakończone");
 	        }
 
 	        rental.setReturned(true);
@@ -144,6 +140,7 @@ public class Service {
 	        System.out.println("Rental " + rentalId + " marked as returned.");
 	    } else {
 	        System.out.println("Rental " + rentalId + " not found.");
+	        throw new Exception("Nie znaleziono wypożyczenia.");
 	    }
 	}
 
@@ -155,12 +152,12 @@ public class Service {
         clients.add(client);
     }
 
-    public static void removeClientById(List<Client> clients, List<Rental> rentals, String clientId) {
+    public static void removeClientById(List<Client> clients, List<Rental> rentals, String clientId) throws Exception {
         Client client = findClientById(clients, clientId);
 
         if (client == null) {
             System.out.println("Client with ID " + clientId + " not found.");
-            return;
+            throw new Exception("Nie znaleziono klienta.");
         }
 
         boolean hasActiveRental = rentals.stream()
@@ -168,7 +165,7 @@ public class Service {
 
         if (hasActiveRental) {
             System.out.println("Cannot remove client " + clientId + ": they have active rentals.");
-            return;
+            throw new Exception("Nie można usunąć klienta bo posiada aktywne wypożyczenie.");
         }
 
         clients.remove(client);
@@ -183,11 +180,11 @@ public class Service {
         bikes.add(bike);
     }
 
-    public static void removeBikeById(List<Bike> bikes, String bikeId, List<Rental> rentals) {
+    public static void removeBikeById(List<Bike> bikes, String bikeId, List<Rental> rentals) throws Exception {
         Bike bike = findBikeById(bikes, bikeId);
         if (bike == null) {
             System.out.println("Bike not found.");
-            return;
+            throw new Exception("Nie znaleziono roweru.");
         }
 
         boolean isInUse = rentals.stream()
@@ -195,7 +192,7 @@ public class Service {
 
         if (isInUse) {
             System.out.println("Cannot remove bike: it is currently rented.");
-            return;
+            throw new Exception("Nie udało się usunąć roweru bo jest on wypożyczony.");
         }
 
         bikes.remove(bike);
@@ -209,7 +206,24 @@ public class Service {
         types.add(type);
     }
 
-    public static void removeTypeById(List<Types> types, String typeId) {
-        types.removeIf(t -> t.getId().equals(typeId));
+    public static void removeTypeById(List<Types> types, String typeId, List<Bike> bikes) throws Exception {
+    	
+    	Types type = findTypeById(types, typeId);
+
+        if (type == null) {
+            System.out.println("type with ID " + typeId + " not found.");
+            throw new Exception("Nie znaleziono typu roweru.");
+        }
+
+        boolean hasActiveRental = bikes.stream()
+            .anyMatch(b -> b.getType().equals(type));
+
+        if (hasActiveRental) {
+            System.out.println("Cannot remove type " + typeId + ": it is in use.");
+            throw new Exception("Nie można usunąć typu bo jest on w użyciu.");
+        }
+
+        types.remove(type);
+        System.out.println("Type " + typeId + " removed successfully.");
     }
 }

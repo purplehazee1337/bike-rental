@@ -78,7 +78,7 @@ public class AddBikeForm extends JDialog {
 	            String description = bikeDescArea.getText().trim();
 	            
 	            if (brand.isEmpty() || model.isEmpty() || wheelSize.isEmpty()) {
-	                throw new IllegalArgumentException();
+	                throw new IllegalArgumentException("Wprowadzono niepoprawne dane.");
 	            }
 	
 	            Service.addBike(bikes, type, brand, model, wheelSize, description, price);
@@ -86,9 +86,11 @@ public class AddBikeForm extends JDialog {
 	            ((MainFrame) parent).refreshTables(); // refresh data
 	            dispose(); // zamknij formularz po dodaniu
 	            
-        	} catch(Exception error) {
-        		JOptionPane.showMessageDialog(parent, "Niepoprawne dane.");
-        	}
+        	} catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(parent, "Wprowadzono niepoprawne dane.", "Missing Data", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(parent, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
         
         cancelButton.addActionListener(e -> dispose());

@@ -42,7 +42,7 @@ class AppTests {
     }
 
 	@Test
-	void appTest() {
+	void appTest() throws Exception {
 	    // --- Load all data ---
 	    DataBundle loadedBundle = Database.readAll();
 
@@ -69,8 +69,9 @@ class AppTests {
 	    assertFalse(bikes.isEmpty(), "Bikes list should not be empty after adding bike");
 
 	    // --- Create a rental ---
+	    LocalDateTime today = LocalDateTime.now();
 	    LocalDateTime plannedEnd = LocalDateTime.now().plusDays(3);
-	    Service.newRental(rentals, bikes, clients, bikes.get(0).getId(), clients.get(0).getId(), plannedEnd);
+	    Service.newRental(rentals, bikes, clients, bikes.get(0).getId(), clients.get(0).getId(), today, plannedEnd);
 
 	    assertFalse(rentals.isEmpty(), "Rentals list should not be empty after creating a new rental");
 
