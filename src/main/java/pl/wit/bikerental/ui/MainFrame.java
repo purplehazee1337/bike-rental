@@ -11,6 +11,7 @@ import pl.wit.bikerental.model.Bike;
 import pl.wit.bikerental.model.Client;
 import pl.wit.bikerental.model.Rental;
 import pl.wit.bikerental.model.Types;
+import pl.wit.bikerental.reporting.BikeReport;
 
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -93,7 +94,8 @@ public class MainFrame extends JFrame {
             "Usuń typ roweru",
             "Pokaż wszystkie rowery",
             "Pokaż dostępne rowery",
-            "Pokaż rowery na wypożyczeniu"
+            "Pokaż rowery na wypożyczeniu",
+            "Pokaż rowery nie zwrócone na czas"
         );
 
         final JFrame parent = this;
@@ -101,8 +103,9 @@ public class MainFrame extends JFrame {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put("Nowy rower", () -> new AddBikeForm(parent, this.bikes, this.types).setVisible(true));
         actions.put("Pokaż wszystkie rowery", () -> showFilteredBikeTable(this.bikes));
-        actions.put("Pokaż dostępne rowery", () -> showFilteredBikeTable(bikes.stream().filter(b -> !b.isRented()).collect(Collectors.toList())));
-        actions.put("Pokaż rowery na wypożyczeniu", () -> showFilteredBikeTable(bikes.stream().filter(Bike::isRented).collect(Collectors.toList())));
+        actions.put("Pokaż dostępne rowery", () -> showFilteredBikeTable(BikeReport.unrentedBikes(bikes)));
+        actions.put("Pokaż rowery na wypożyczeniu", () -> showFilteredBikeTable(BikeReport.currentlyRented(rentals)));
+        actions.put("Pokaż rowery nie zwrócone na czas", () -> showFilteredBikeTable(BikeReport.overtimeRented(rentals)));
         actions.put("Edytuj rower", () -> new EditBikeForm(parent, this.bikes, this.types).setVisible(true));
         actions.put("Usuń rower", () -> new DeleteBikeForm(parent, this.bikes, this.rentals).setVisible(true));
         actions.put("Nowy typ roweru", () -> new AddTypeForm(parent, this.types).setVisible(true));
