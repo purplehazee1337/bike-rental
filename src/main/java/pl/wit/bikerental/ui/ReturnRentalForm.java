@@ -3,10 +3,14 @@ package pl.wit.bikerental.ui;
 import javax.swing.*;
 import java.awt.*;
 
-public class ReturnRentalForm extends JDialog {
-    private JComboBox<Integer> rentalIdComboBox;
+import pl.wit.bikerental.model.Rental;
+import pl.wit.bikerental.service.Service;
+import java.util.List;
 
-    public ReturnRentalForm(JFrame parent) {
+public class ReturnRentalForm extends JDialog {
+    private JComboBox<String> rentalIdComboBox;
+
+    public ReturnRentalForm(JFrame parent, List<Rental> rentals) {
         super(parent, "Zwróć wypożyczenie", true);
         setSize(300, 160);
         setLocationRelativeTo(parent);
@@ -23,6 +27,9 @@ public class ReturnRentalForm extends JDialog {
 
         gbc.gridx = 1;
         rentalIdComboBox = new JComboBox<>();
+        for (Rental r : rentals) {
+            rentalIdComboBox.addItem(r.getId());
+        }
         panel.add(rentalIdComboBox, gbc);
 
         gbc.gridx = 0;
@@ -33,8 +40,17 @@ public class ReturnRentalForm extends JDialog {
         panel.add(returnButton, gbc);
 
         returnButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Wypożyczenie zostało zwrócone");
-        });
+        	try {
+                String id = (String) rentalIdComboBox.getSelectedItem();
+                
+                Service.completeRental(rentals, id);
+                ((MainFrame) parent).refreshTables(); // refresh data
+                dispose(); // zamknij formularz po dodaniu
+                
+        	} catch(Exception error) {
+        		JOptionPane.showMessageDialog(parent, "Błąd.");
+        	}
+    	});
 
         add(panel);
     }

@@ -76,6 +76,10 @@ public class AddBikeForm extends JDialog {
 	            String wheelSize = wheelSizeField.getText().trim();
 	            int price = Integer.parseInt(pricePerH.getText().trim());
 	            String description = bikeDescArea.getText().trim();
+	            
+	            if (brand.isEmpty() || model.isEmpty() || wheelSize.isEmpty()) {
+	                throw new IllegalArgumentException();
+	            }
 	
 	            Service.addBike(bikes, type, brand, model, wheelSize, description, price);
 	            

@@ -3,8 +3,12 @@ package pl.wit.bikerental.ui;
 import javax.swing.*;
 import java.awt.*;
 
+import pl.wit.bikerental.model.Client;
+import pl.wit.bikerental.service.Service;
+import java.util.List;
+
 public class EditClientForm extends JDialog {
-    public EditClientForm(JFrame parent) {
+    public EditClientForm(JFrame parent, List<Client> clients) {
         super(parent, "Edytuj klienta", true);
         setSize(400, 300);
         setLocationRelativeTo(parent);
@@ -17,7 +21,10 @@ public class EditClientForm extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
-        JComboBox<Integer> idCombo = new JComboBox<>();
+        JComboBox<String> idCombo = new JComboBox<>();
+        for (Client c : clients) {
+            idCombo.addItem(c.getId());
+        }
         JTextField firstNameField = new JTextField(20);
         JTextField lastNameField = new JTextField(20);
         JTextField phoneField = new JTextField(20);
@@ -55,9 +62,26 @@ public class EditClientForm extends JDialog {
         buttonPanel.add(cancelButton);
 
         updateButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Klient został edytowany.");
+        	try {
+        		String id = (String) idCombo.getSelectedItem();
+	            String firstName = firstNameField.getText().trim();
+	            String lastName = lastNameField.getText().trim();
+	            String phoneNumber = phoneField.getText().trim();
+	            String email = emailField.getText().trim();
+	            
+	            if (firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty() || email.isEmpty()) {
+	                throw new IllegalArgumentException();
+	            }
+	            
+	            Service.editClientById(clients, id, firstName, lastName, phoneNumber, email);
+	            
+	            ((MainFrame) parent).refreshTables(); // refresh data
+	            dispose(); // zamknij formularz po edycji
+	            
+        	} catch(Exception error) {
+        		JOptionPane.showMessageDialog(parent, "Niepoprawne dane.");
+        	}
         });
-
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);
