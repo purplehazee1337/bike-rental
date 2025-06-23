@@ -54,7 +54,7 @@ class BikeReportTest {
         bikes.get(1).setRented(false); // B2 not rented
         bikes.get(2).setRented(false); // B3 not rented
 
-        List<Bike> unrented = BikeReport.unrentedBikes(bikes);
+        List<Bike> unrented = Raports.unrentedBikes(bikes);
         assertEquals(2, unrented.size());
         assertTrue(unrented.contains(bikes.get(1)));
         assertTrue(unrented.contains(bikes.get(2)));
@@ -78,7 +78,7 @@ class BikeReportTest {
         rental3.setReturned(true);
         rentals.add(rental3);
 
-        List<Bike> currentlyRented = BikeReport.currentlyRented(rentals);
+        List<Bike> currentlyRented = Raports.currentlyRentedBikes(rentals);
 
         // Should include both rental1 and rental2 (both actualReturnDate == null)
         assertEquals(2, currentlyRented.size());
@@ -104,7 +104,7 @@ class BikeReportTest {
         rental3.setActualReturnDate(now.minusDays(6));
         rentals.add(rental3);
 
-        List<Bike> overtime = BikeReport.overtimeRented(rentals);
+        List<Bike> overtime = Raports.overtimeRentedBikes(rentals);
 
         // Should include only rental1/bikes.get(0)
         assertEquals(1, overtime.size());
@@ -115,8 +115,8 @@ class BikeReportTest {
 
     @Test
     void emptyListsTest() {
-        assertTrue(BikeReport.unrentedBikes(new ArrayList<>()).isEmpty());
-        assertTrue(BikeReport.currentlyRented(new ArrayList<>()).isEmpty());
-        assertTrue(BikeReport.overtimeRented(new ArrayList<>()).isEmpty());
+        assertTrue(Raports.unrentedBikes(new ArrayList<>()).isEmpty());
+        assertTrue(Raports.currentlyRentedBikes(new ArrayList<>()).isEmpty());
+        assertTrue(Raports.overtimeRentedBikes(new ArrayList<>()).isEmpty());
     }
 }
