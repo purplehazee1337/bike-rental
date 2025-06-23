@@ -14,7 +14,7 @@ import pl.wit.bikerental.model.Rental;
 * @since 2025-06-15
 */
 
-public class BikeReport {
+public class Raports {
 
     // --- Report: List of not rented bikes --- //
     public static List<Bike> unrentedBikes(List<Bike> bikes) {
@@ -25,7 +25,7 @@ public class BikeReport {
     }
 
     // --- Report: List of overdue rentals (not yet returned and past deadline) --- //
-    public static List<Bike> overtimeRented(List<Rental> rentals) {
+    public static List<Bike> overtimeRentedBikes(List<Rental> rentals) {
         return rentals.stream()
             .filter(rent ->
                 rent.getActualReturnDate() == null &&
@@ -38,7 +38,7 @@ public class BikeReport {
     }
 
     // --- Report: List of currently rented bikes (not returned, planned end exists) --- //
-    public static List<Bike> currentlyRented(List<Rental> rentals) {
+    public static List<Bike> currentlyRentedBikes(List<Rental> rentals) {
         return rentals.stream()
             .filter(rent ->
                 rent.getActualReturnDate() == null &&

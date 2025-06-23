@@ -10,7 +10,7 @@ import pl.wit.bikerental.model.Bike;
 import pl.wit.bikerental.model.Client;
 import pl.wit.bikerental.model.Rental;
 import pl.wit.bikerental.model.Types;
-import pl.wit.bikerental.reporting.BikeReport;
+import pl.wit.bikerental.reporting.Raports;
 
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -26,6 +26,7 @@ public class MainFrame extends JFrame {
     private JTable bikeTable;
     private JTable clientTable;
     private JTable rentalTable;
+    private JTable typesTable;
 
     public MainFrame(List<Bike> bikes, List<Client> clients, List<Rental> rentals, List<Types> types) {
         this.bikes = bikes;
@@ -45,10 +46,12 @@ public class MainFrame extends JFrame {
         JButton bikesButton = createButton("Rowery");
         JButton clientsButton = createButton("Klienci");
         JButton rentalsButton = createButton("Wypożyczenia");
+        JButton typesButton = createButton("Typy rowerów");
 
         topPanel.add(bikesButton);
         topPanel.add(clientsButton);
         topPanel.add(rentalsButton);
+        topPanel.add(typesButton);
 
         // Side panels for action buttons
         leftCardPanel = new JPanel(new CardLayout());
@@ -57,75 +60,31 @@ public class MainFrame extends JFrame {
         leftCardPanel.add(createBikeButtonPanel(), "rowery");
         leftCardPanel.add(createClientButtonPanel(), "klienci");
         leftCardPanel.add(createRentalButtonPanel(), "wypozyczenia");
+        leftCardPanel.add(createTypesButtonPanel(), "typy");
 
         // Central panel with tables
         centerCardPanel = new JPanel(new CardLayout());
         bikeTable = createBikeTable();
         clientTable = createClientTable();
         rentalTable = createRentalTable();
+        typesTable = createTypesTable();
 
         centerCardPanel.add(new JScrollPane(bikeTable), "rowery");
         centerCardPanel.add(new JScrollPane(clientTable), "klienci");
         centerCardPanel.add(new JScrollPane(rentalTable), "wypozyczenia");
+        centerCardPanel.add(new JScrollPane(typesTable), "typy");
 
         // Action listeners for switching views
         bikesButton.addActionListener(e -> switchCard("rowery"));
         clientsButton.addActionListener(e -> switchCard("klienci"));
         rentalsButton.addActionListener(e -> switchCard("wypozyczenia"));
+        typesButton.addActionListener(e -> switchCard("typy"));
 
         add(topPanel, BorderLayout.NORTH);
         add(leftCardPanel, BorderLayout.WEST);
         add(centerCardPanel, BorderLayout.CENTER);
     }
-
-    private void switchCard(String name) {
-        ((CardLayout) leftCardPanel.getLayout()).show(leftCardPanel, name);
-        ((CardLayout) centerCardPanel.getLayout()).show(centerCardPanel, name);
-    }
-
-    private JPanel createBikeButtonPanel() {
-        JPanel panel = createVerticalButtonPanel(
-            "Nowy rower",
-            "Edytuj rower",
-            "Usuń rower",
-            "Nowy typ roweru",
-            "Edytuj typ roweru",
-            "Usuń typ roweru",
-            "Pokaż wszystkie typy rowerów",
-            "Pokaż wszystkie rowery",
-            "Pokaż dostępne rowery",
-            "Pokaż rowery na wypożyczeniu",
-            "Pokaż rowery nie zwrócone na czas"
-        );
-
-        final JFrame parent = this;
-
-        Map<String, Runnable> actions = new HashMap<>();
-        actions.put("Nowy rower", () -> new AddBikeForm(parent, this.bikes, this.types).setVisible(true));
-        actions.put("Pokaż wszystkie rowery", () -> showFilteredBikeTable(this.bikes));
-        actions.put("Pokaż dostępne rowery", () -> showFilteredBikeTable(BikeReport.unrentedBikes(bikes)));
-        actions.put("Pokaż rowery na wypożyczeniu", () -> showFilteredBikeTable(BikeReport.currentlyRented(rentals)));
-        actions.put("Pokaż rowery nie zwrócone na czas", () -> showFilteredBikeTable(BikeReport.overtimeRented(rentals)));
-        actions.put("Edytuj rower", () -> new EditBikeForm(parent, this.bikes, this.types).setVisible(true));
-        actions.put("Usuń rower", () -> new DeleteBikeForm(parent, this.bikes, this.rentals).setVisible(true));
-        actions.put("Nowy typ roweru", () -> new AddTypeForm(parent, this.types).setVisible(true));
-        actions.put("Edytuj typ roweru", () -> new EditTypeForm(parent, this.types).setVisible(true));
-        actions.put("Usuń typ roweru", () -> new DeleteTypeForm(parent, this.types, this.bikes).setVisible(true));
-        actions.put("Pokaż wszystkie typy rowerów", () -> showBikeTypesTable(this.types));
-
-        for (Component c : panel.getComponents()) {
-            if (c instanceof JButton) {
-                JButton button = (JButton) c;
-                Runnable action = actions.get(button.getText());
-                if (action != null) {
-                    button.addActionListener(e -> action.run());
-                }
-            }
-        }
-
-        return panel;
-    }
-    
+   
     private void showFilteredBikeTable(List<Bike> filteredBikes) {
         String[] cols = {"ID", "Typ", "Marka", "Model", "Rozmiar koła", "Opis", "Cena za godzine", "Stan"};
         Object[][] data = new Object[filteredBikes.size()][cols.length];
@@ -147,24 +106,47 @@ public class MainFrame extends JFrame {
         centerCardPanel.add(new JScrollPane(bikeTable), "rowery", 0);
         switchCard("rowery");
     }
-    
-    private void showBikeTypesTable(List<Types> allTypes) {
-    	String[] cols = {"ID", "Nazwa", "Opis"};
-    	Object[][] data = new Object[allTypes.size()][cols.length];
-    	
-    	for(int i = 0; i < allTypes.size(); i++) {
-    		Types t = allTypes.get(i);
-    		data[i][0] = t.getId();
-    		data[i][1] = t.getName();
-    		data[i][2] = t.getDescription();
-    	}
-    	
-    	centerCardPanel.remove(0);
-        bikeTable = new JTable(data, cols);
-        centerCardPanel.add(new JScrollPane(bikeTable), "rowery", 0);
-        switchCard("rowery");
-    }
 
+    private void switchCard(String name) {
+        ((CardLayout) leftCardPanel.getLayout()).show(leftCardPanel, name);
+        ((CardLayout) centerCardPanel.getLayout()).show(centerCardPanel, name);
+    }
+    
+    private JPanel createBikeButtonPanel() {
+        JPanel panel = createVerticalButtonPanel(
+            "Nowy rower",
+            "Edytuj rower",
+            "Usuń rower",
+            "Pokaż wszystkie rowery",
+            "Pokaż dostępne rowery",
+            "Pokaż rowery na wypożyczeniu",
+            "Pokaż rowery niezwrócone na czas"
+        );
+
+        final JFrame parent = this;
+
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put("Nowy rower", () -> new AddBikeForm(parent, this.bikes, this.types).setVisible(true));
+        actions.put("Pokaż wszystkie rowery", () -> showFilteredBikeTable(this.bikes));
+        actions.put("Pokaż dostępne rowery", () -> showFilteredBikeTable(Raports.unrentedBikes(bikes)));
+        actions.put("Pokaż rowery na wypożyczeniu", () -> showFilteredBikeTable(Raports.currentlyRentedBikes(rentals)));
+        actions.put("Pokaż rowery niezwrócone na czas", () -> showFilteredBikeTable(Raports.overtimeRentedBikes(rentals)));
+        actions.put("Edytuj rower", () -> new EditBikeForm(parent, this.bikes, this.types).setVisible(true));
+        actions.put("Usuń rower", () -> new DeleteBikeForm(parent, this.bikes, this.rentals).setVisible(true));
+
+        for (Component c : panel.getComponents()) {
+            if (c instanceof JButton) {
+                JButton button = (JButton) c;
+                Runnable action = actions.get(button.getText());
+                if (action != null) {
+                    button.addActionListener(e -> action.run());
+                }
+            }
+        }
+
+        return panel;
+    }
+    
     private JPanel createClientButtonPanel() {
         JPanel panel = createVerticalButtonPanel(
             "Nowy klient",
@@ -203,6 +185,33 @@ public class MainFrame extends JFrame {
         Map<String, Runnable> actions = new HashMap<>();
         actions.put("Nowe wypożyczenie", () -> new AddRentalForm(parent, this.bikes, this.clients, this.rentals).setVisible(true));
         actions.put("Zwróć wypożyczenie", () -> new ReturnRentalForm(parent, this.rentals).setVisible(true));
+
+        for (Component c : panel.getComponents()) {
+            if (c instanceof JButton) {
+                JButton button = (JButton) c;
+                Runnable action = actions.get(button.getText());
+                if (action != null) {
+                    button.addActionListener(e -> action.run());
+                }
+            }
+        }
+
+        return panel;
+    }
+    
+    private JPanel createTypesButtonPanel() {
+        JPanel panel = createVerticalButtonPanel(
+        		"Nowy typ roweru",
+                "Edytuj typ roweru",
+                "Usuń typ roweru"
+        );
+
+        final JFrame parent = this;
+
+        Map<String, Runnable> actions = new HashMap<>();
+        actions.put("Nowy typ roweru", () -> new AddTypeForm(parent, this.types).setVisible(true));
+        actions.put("Edytuj typ roweru", () -> new EditTypeForm(parent, this.types).setVisible(true));
+        actions.put("Usuń typ roweru", () -> new DeleteTypeForm(parent, this.types, this.bikes).setVisible(true));
 
         for (Component c : panel.getComponents()) {
             if (c instanceof JButton) {
@@ -281,6 +290,20 @@ public class MainFrame extends JFrame {
 
         return new JTable(data, cols);
     }
+    
+    private JTable createTypesTable() {
+    	String[] cols = {"ID", "Nazwa", "Opis"};
+        Object[][] data = new Object[types.size()][cols.length];
+
+        for (int i = 0; i < types.size(); i++) {
+            Types t = types.get(i);
+            data[i][0] = t.getId();
+            data[i][1] = t.getName();
+            data[i][2] = t.getDescription();
+        }
+
+        return new JTable(data, cols);
+    }
 
     public void refreshTables() {
         // Remove old tables
@@ -290,11 +313,13 @@ public class MainFrame extends JFrame {
         bikeTable = createBikeTable();
         clientTable = createClientTable();
         rentalTable = createRentalTable();
+        typesTable = createTypesTable();
 
         // Add to center panel
         centerCardPanel.add(new JScrollPane(bikeTable), "rowery");
         centerCardPanel.add(new JScrollPane(clientTable), "klienci");
         centerCardPanel.add(new JScrollPane(rentalTable), "wypozyczenia");
+        centerCardPanel.add(new JScrollPane(typesTable), "typy");
 
         // Revalidate and repaint to update UI
         centerCardPanel.revalidate();
