@@ -61,6 +61,7 @@ public class ReturnRentalForm extends JDialog {
                 
                 Service.completeRental(rentals, id);
                 ((MainFrame) parent).refreshTables(); // Refresh table data
+                ((MainFrame) parent).switchCard("wypozyczenia");
                 dispose(); // Close the form
                 
         	} catch (IllegalArgumentException ex) {

@@ -63,6 +63,7 @@ public class DeleteClientForm extends JDialog {
 	            Service.removeClientById(clients, rentals, id);
 	            
 	            ((MainFrame) parent).refreshTables(); // Refresh table data
+	            ((MainFrame) parent).switchCard("klienci");
 	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {

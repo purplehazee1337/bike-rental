@@ -83,6 +83,7 @@ public class EditTypeForm extends JDialog {
 	            Service.editTypeById(types, id, name, description);
 	            
 	            ((MainFrame) parent).refreshTables(); // Refresh table data
+	            ((MainFrame) parent).switchCard("typy");
 	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {

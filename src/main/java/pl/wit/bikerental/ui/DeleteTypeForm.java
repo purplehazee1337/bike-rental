@@ -63,6 +63,7 @@ public class DeleteTypeForm extends JDialog {
 	            Service.removeTypeById(types, id, bikes);
 	            
 	            ((MainFrame) parent).refreshTables(); // Refresh table data
+	            ((MainFrame) parent).switchCard("typy");
 	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {
