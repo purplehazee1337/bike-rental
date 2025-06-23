@@ -1,6 +1,13 @@
 /**
- * Contains data model classes (POJOs) representing core entities
- * such as Bike, User, and Rental. These classes encapsulate the
- * application's domain data and are used throughout the system.
+ * 
+ * <p>This package includes:
+ * <ul>
+ *   <li>{@link pl.wit.bikerental.model.Bike} – details about bikes available for rent.</li>
+ *   <li>{@link pl.wit.bikerental.model.Client} – information about customers.</li>
+ *   <li>{@link pl.wit.bikerental.model.Rental} – records of bike rentals by clients.</li>
+ *   <li>{@link pl.wit.bikerental.model.Types} – categories of bikes.</li>
+ * </ul>
+ * 
+ * These classes store the main data used throughout the application.
  */
 package pl.wit.bikerental.model;

@@ -14,7 +14,14 @@ import pl.wit.bikerental.storage.DataBundle;
 import pl.wit.bikerental.storage.Database;
 import pl.wit.bikerental.ui.MainFrame;
 
+/**
+ * Main application class that loads data, initializes default entities,
+ * launches the UI, and saves data on shutdown.
+ * 
+ * @author Wojciech Jechowski, Krzysztof Mickiewicz, Dominik Pękala
+ */
 public class App {
+	/** Application entry point. */
     public static void main(String[] args) {
         // --- Load all data ---
         DataBundle loadedBundle = Database.readAll();
