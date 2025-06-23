@@ -122,6 +122,7 @@ public class AddRentalForm extends JDialog {
             
             Service.newRental(rentals, bikes, clients, bikeId, clientId, fromDate, toDate);
             ((MainFrame) parent).refreshTables(); // Refresh table data
+            ((MainFrame) parent).switchCard("wypozyczenia");
             dispose(); // Close the form
             
     	} catch (IllegalArgumentException ex) {

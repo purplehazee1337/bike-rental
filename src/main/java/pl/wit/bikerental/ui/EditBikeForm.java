@@ -113,6 +113,7 @@ public class EditBikeForm extends JDialog {
 	            Service.findBikeById(bikes, id).setType(type);
 	            
 	            ((MainFrame) parent).refreshTables(); // Refresh table data
+	            ((MainFrame) parent).switchCard("rowery");
 	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {

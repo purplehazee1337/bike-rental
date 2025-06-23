@@ -94,6 +94,7 @@ public class EditClientForm extends JDialog {
 	            Service.editClientById(clients, id, firstName, lastName, phoneNumber, email);
 	            
 	            ((MainFrame) parent).refreshTables(); // Refresh table data
+	            ((MainFrame) parent).switchCard("klienci");
 	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {

@@ -110,7 +110,8 @@ public class AddBikeForm extends JDialog {
 	
 	            Service.addBike(bikes, type, brand, model, wheelSize, description, price);
 	            
-	            ((MainFrame) parent).refreshTables(); // Refresh table after update
+	            ((MainFrame) parent).refreshTables();// Refresh table after update
+	            ((MainFrame) parent).switchCard("rowery");
 	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {

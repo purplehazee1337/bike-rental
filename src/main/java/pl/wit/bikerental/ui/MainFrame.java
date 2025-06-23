@@ -85,29 +85,9 @@ public class MainFrame extends JFrame {
         add(centerCardPanel, BorderLayout.CENTER);
     }
    
-    private void showFilteredBikeTable(List<Bike> filteredBikes) {
-        String[] cols = {"ID", "Typ", "Marka", "Model", "Rozmiar koła", "Opis", "Cena za godzine", "Stan"};
-        Object[][] data = new Object[filteredBikes.size()][cols.length];
+    
 
-        for (int i = 0; i < filteredBikes.size(); i++) {
-            Bike b = filteredBikes.get(i);
-            data[i][0] = b.getId();
-            data[i][1] = b.getType().getName();
-            data[i][2] = b.getBrand();
-            data[i][3] = b.getModel();
-            data[i][4] = b.getWheelSize();
-            data[i][5] = b.getDescription();
-            data[i][6] = b.getPricePerH();
-            data[i][7] = b.isRented() ? "Wypożyczony" : "Dostępny";
-        }
-
-        centerCardPanel.remove(0);
-        bikeTable = new JTable(data, cols);
-        centerCardPanel.add(new JScrollPane(bikeTable), "rowery", 0);
-        switchCard("rowery");
-    }
-
-    private void switchCard(String name) {
+    public void switchCard(String name) {
         ((CardLayout) leftCardPanel.getLayout()).show(leftCardPanel, name);
         ((CardLayout) centerCardPanel.getLayout()).show(centerCardPanel, name);
     }
@@ -117,7 +97,6 @@ public class MainFrame extends JFrame {
             "Nowy rower",
             "Edytuj rower",
             "Usuń rower",
-            "Pokaż wszystkie rowery",
             "Pokaż dostępne rowery",
             "Pokaż rowery na wypożyczeniu",
             "Pokaż rowery niezwrócone na czas"
@@ -127,12 +106,12 @@ public class MainFrame extends JFrame {
 
         Map<String, Runnable> actions = new HashMap<>();
         actions.put("Nowy rower", () -> new AddBikeForm(parent, this.bikes, this.types).setVisible(true));
-        actions.put("Pokaż wszystkie rowery", () -> showFilteredBikeTable(this.bikes));
-        actions.put("Pokaż dostępne rowery", () -> showFilteredBikeTable(Raports.unrentedBikes(bikes)));
-        actions.put("Pokaż rowery na wypożyczeniu", () -> showFilteredBikeTable(Raports.currentlyRentedBikes(rentals)));
-        actions.put("Pokaż rowery niezwrócone na czas", () -> showFilteredBikeTable(Raports.overtimeRentedBikes(rentals)));
         actions.put("Edytuj rower", () -> new EditBikeForm(parent, this.bikes, this.types).setVisible(true));
         actions.put("Usuń rower", () -> new DeleteBikeForm(parent, this.bikes, this.rentals).setVisible(true));
+        
+        actions.put("Pokaż dostępne rowery", () -> createRaportFrame(Raports.unrentedBikes(bikes), "Dostępne rowery"));
+        actions.put("Pokaż rowery na wypożyczeniu", () -> createRaportFrame(Raports.currentlyRentedBikes(rentals), "Wypożycznone rowery"));
+        actions.put("Pokaż rowery niezwrócone na czas", () -> createRaportFrame(Raports.overtimeRentedBikes(rentals), "Rowery niezwrócone na czas"));
 
         for (Component c : panel.getComponents()) {
             if (c instanceof JButton) {
@@ -305,6 +284,33 @@ public class MainFrame extends JFrame {
         return new JTable(data, cols);
     }
 
+    private void createRaportFrame(List<Bike> filteredBikes, String frameName) {
+        String[] cols = {"ID", "Typ", "Marka", "Model", "Rozmiar koła", "Opis", "Cena za godzine", "Stan"};
+        Object[][] data = new Object[filteredBikes.size()][cols.length];
+
+        for (int i = 0; i < filteredBikes.size(); i++) {
+            Bike b = filteredBikes.get(i);
+            data[i][0] = b.getId();
+            data[i][1] = b.getType().getName();
+            data[i][2] = b.getBrand();
+            data[i][3] = b.getModel();
+            data[i][4] = b.getWheelSize();
+            data[i][5] = b.getDescription();
+            data[i][6] = b.getPricePerH();
+            data[i][7] = b.isRented() ? "Wypożyczony" : "Dostępny";
+        }
+
+        JTable bikeTable = new JTable(data, cols);
+        JScrollPane scrollPane = new JScrollPane(bikeTable);
+
+        JFrame frame = new JFrame(frameName);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(800, 400);
+        frame.setLocationRelativeTo(null); // Center on screen
+        frame.add(scrollPane);
+        frame.setVisible(true);
+    }
+    
     public void refreshTables() {
         // Remove old tables
         centerCardPanel.removeAll();

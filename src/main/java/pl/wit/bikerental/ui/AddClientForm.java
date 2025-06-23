@@ -93,6 +93,7 @@ public class AddClientForm extends JDialog {
 	            Service.addClient(clients, firstName, lastName, phoneNumber, email);
 	            
 	            ((MainFrame) parent).refreshTables(); // Refresh table data
+	            ((MainFrame) parent).switchCard("klienci");
 	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {

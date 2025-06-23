@@ -75,6 +75,7 @@ public class AddTypeForm extends JDialog {
 	            Service.addType(types, name, description);
 	            
 	            ((MainFrame) parent).refreshTables(); // Refresh table data
+	            ((MainFrame) parent).switchCard("typy");
 	            dispose(); // Close the form
 	            
         	} catch (IllegalArgumentException ex) {
