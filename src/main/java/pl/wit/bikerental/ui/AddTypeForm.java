@@ -12,16 +12,12 @@ import java.util.List;
  * Dialog form for creating and adding a new bike type to the system.
  * The user can enter a type name and a description,
  * which will be validated and added to the provided types list.
+ * 
+ * @author Dominik Pękala
  */
 public class AddTypeForm extends JDialog {
 	
-	/**
-     * Constructs the dialog window used for entering a new bike type.
-     * Initializes the form layout, input fields and button actions.
-     *
-     * @param parent the parent JFrame that owns this dialog
-     * @param types  the list of all existing bike types to which the new type will be added
-     */
+	/** Constructs the dialog window used for entering a new bike type. */
     public AddTypeForm(JFrame parent, List<Types> types) {
         super(parent, "Nowy typ roweru", true);
         setSize(350, 240);
@@ -34,11 +30,11 @@ public class AddTypeForm extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // UI components for input
+        /** UI components for input */
         JTextField nameField = new JTextField(20);
         JTextArea descArea = new JTextArea(3, 20);
 
-        // Form layout for labels and fields
+        /** Form layout for labels and fields */
         gbc.gridx = 0;
         gbc.gridy = 0;
         formPanel.add(new JLabel("Nazwa typu:"), gbc);
@@ -51,18 +47,14 @@ public class AddTypeForm extends JDialog {
         gbc.gridx = 1;
         formPanel.add(new JScrollPane(descArea), gbc);
 
-        // Bottom buttons
+        /** Bottom buttons */
         JPanel buttonPanel = new JPanel();
         JButton addButton = new JButton("Dodaj");
         JButton cancelButton = new JButton("Anuluj");
         buttonPanel.add(addButton);
         buttonPanel.add(cancelButton);
 
-        /**
-         * Action listener that processes form submission.
-         * It checks if fields are filled, then adds a new type using the service layer.
-         * Refreshes the main table view and closes the dialog.
-         */
+        /** Actions performed by buttons (adding new bike type) */
         addButton.addActionListener(e -> {
         	try {
 	            String name = nameField.getText().trim();
@@ -85,9 +77,7 @@ public class AddTypeForm extends JDialog {
             }
         });
         
-        /**
-         * Closes the form without saving any input.
-         */
+        /** Closing the form without saving. */
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);

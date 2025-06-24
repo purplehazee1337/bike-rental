@@ -12,18 +12,12 @@ import java.util.List;
  * Dialog window that allows the user to edit an existing bike's data based on its ID.
  * The form enables modification of bike attributes such as type, brand, model,
  * wheel size, price per hour, and description.
+ * 
+ * @author Dominik Pękala
  */
 public class EditBikeForm extends JDialog {
 	
-	/**
-     * Constructs a modal dialog for editing a bike's properties.
-     * Provides dropdown to select the bike by ID and fields to update its information.
-     * Uses the service layer to persist changes.
-     *
-     * @param parent The parent JFrame that owns this dialog.
-     * @param bikes  The list of existing bikes to be updated.
-     * @param types  The list of available bike types for selection.
-     */
+	/** Constructs a dialog for editing a bike's properties. */
     public EditBikeForm(JFrame parent, List<Bike> bikes, List<Types> types) {
         super(parent, "Edytuj rower", true);
         setSize(380, 400);
@@ -36,7 +30,7 @@ public class EditBikeForm extends JDialog {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // ComboBoxes and input fields
+        /** UI components for input */
         JComboBox<String> idCombo = new JComboBox<>();
         for (Bike b : bikes) {
             idCombo.addItem(b.getId());
@@ -51,7 +45,7 @@ public class EditBikeForm extends JDialog {
         JTextField pricePerH = new JTextField(20);
         JTextArea bikeDescArea = new JTextArea(3, 20);
 
-        // Form layout
+        /** Form layout */
         gbc.gridx = 0; gbc.gridy = 0;
         formPanel.add(new JLabel("ID roweru:"), gbc);
         gbc.gridx = 1;
@@ -87,14 +81,14 @@ public class EditBikeForm extends JDialog {
         gbc.gridx = 1;
         formPanel.add(new JScrollPane(bikeDescArea), gbc);
 
-        // Buttons
+        /** Bottom buttons */
         JPanel buttonPanel = new JPanel();
         JButton updateButton = new JButton("Zmień");
         JButton cancelButton = new JButton("Anuluj");
         buttonPanel.add(updateButton);
         buttonPanel.add(cancelButton);
 
-        // Update logic
+        /** Actions performed by buttons (editing existing bike) */
         updateButton.addActionListener(e -> {
         	try {
         		String id = (String) idCombo.getSelectedItem();
@@ -123,7 +117,7 @@ public class EditBikeForm extends JDialog {
             }
         });
         
-        // Close form without changes
+        /** Closing the form without saving. */
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);

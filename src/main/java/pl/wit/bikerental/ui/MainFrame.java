@@ -12,6 +12,13 @@ import pl.wit.bikerental.model.Rental;
 import pl.wit.bikerental.model.Types;
 import pl.wit.bikerental.reporting.Raports;
 
+/**
+ * The main application window for the Bike Rental system.
+ * Provides navigation and management panels for bikes, clients, rentals, and bike types.
+ * 
+ * @author Dominik Pękala
+ */
+
 public class MainFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
@@ -27,7 +34,8 @@ public class MainFrame extends JFrame {
     private JTable clientTable;
     private JTable rentalTable;
     private JTable typesTable;
-
+    
+    /** Constructs the main application window with provided data. */
     public MainFrame(List<Bike> bikes, List<Client> clients, List<Rental> rentals, List<Types> types) {
         this.bikes = bikes;
         this.clients = clients;
@@ -41,7 +49,7 @@ public class MainFrame extends JFrame {
         setResizable(false);
         setLayout(new BorderLayout());
 
-        // Top navigation buttons
+        /** Top navigation buttons */
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         JButton bikesButton = createButton("Rowery");
         JButton clientsButton = createButton("Klienci");
@@ -53,7 +61,7 @@ public class MainFrame extends JFrame {
         topPanel.add(rentalsButton);
         topPanel.add(typesButton);
 
-        // Side panels for action buttons
+        /** left-side panel for action buttons */
         leftCardPanel = new JPanel(new CardLayout());
         leftCardPanel.setPreferredSize(new Dimension(260, getHeight()));
 
@@ -62,7 +70,7 @@ public class MainFrame extends JFrame {
         leftCardPanel.add(createRentalButtonPanel(), "wypozyczenia");
         leftCardPanel.add(createTypesButtonPanel(), "typy");
 
-        // Central panel with tables
+        /** Central panel with data tables */
         centerCardPanel = new JPanel(new CardLayout());
         bikeTable = createBikeTable();
         clientTable = createClientTable();
@@ -74,7 +82,7 @@ public class MainFrame extends JFrame {
         centerCardPanel.add(new JScrollPane(rentalTable), "wypozyczenia");
         centerCardPanel.add(new JScrollPane(typesTable), "typy");
 
-        // Action listeners for switching views
+        /** Action listeners for switching views */
         bikesButton.addActionListener(e -> switchCard("rowery"));
         clientsButton.addActionListener(e -> switchCard("klienci"));
         rentalsButton.addActionListener(e -> switchCard("wypozyczenia"));
@@ -86,12 +94,13 @@ public class MainFrame extends JFrame {
     }
    
     
-
+    /** Switches the visible card in both the side and center panels. */
     public void switchCard(String name) {
         ((CardLayout) leftCardPanel.getLayout()).show(leftCardPanel, name);
         ((CardLayout) centerCardPanel.getLayout()).show(centerCardPanel, name);
     }
     
+    /** Creates a panel with bike management action buttons. */
     private JPanel createBikeButtonPanel() {
         JPanel panel = createVerticalButtonPanel(
             "Nowy rower",
@@ -126,6 +135,7 @@ public class MainFrame extends JFrame {
         return panel;
     }
     
+    /** Creates a panel with client management action buttons. */
     private JPanel createClientButtonPanel() {
         JPanel panel = createVerticalButtonPanel(
             "Nowy klient",
@@ -153,6 +163,7 @@ public class MainFrame extends JFrame {
         return panel;
     }
 
+    /** Creates a panel with rental management action buttons. */
     private JPanel createRentalButtonPanel() {
         JPanel panel = createVerticalButtonPanel(
             "Nowe wypożyczenie",
@@ -178,6 +189,7 @@ public class MainFrame extends JFrame {
         return panel;
     }
     
+    /** Creates a panel with bike type management action buttons. */
     private JPanel createTypesButtonPanel() {
         JPanel panel = createVerticalButtonPanel(
         		"Nowy typ roweru",
@@ -205,6 +217,7 @@ public class MainFrame extends JFrame {
         return panel;
     }
 
+    /** Creates a vertical panel with buttons. */
     private JPanel createVerticalButtonPanel(String... buttonNames) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -216,6 +229,7 @@ public class MainFrame extends JFrame {
         return panel;
     }
 
+    /** Creates a table with bike data. */
     private JTable createBikeTable() {
         String[] cols = {"ID", "Typ", "Marka", "Model", "Rozmiar koła", "Opis", "Cena za godzine", "Stan"};
         Object[][] data = new Object[bikes.size()][cols.length];
@@ -235,6 +249,7 @@ public class MainFrame extends JFrame {
         return new JTable(data, cols);
     }
 
+    /** Creates a table with client data. */
     private JTable createClientTable() {
         String[] cols = {"ID", "Imię", "Nazwisko", "Telefon", "E-mail"};
         Object[][] data = new Object[clients.size()][cols.length];
@@ -251,6 +266,7 @@ public class MainFrame extends JFrame {
         return new JTable(data, cols);
     }
 
+    /** Creates a table with rental data. */
     private JTable createRentalTable() {
     	
         String[] cols = {"ID", "Klient", "Rower", "Od", "Do", "Stan", "Data zwrotu"};
@@ -270,6 +286,7 @@ public class MainFrame extends JFrame {
         return new JTable(data, cols);
     }
     
+    /** Creates a table with bike type data. */
     private JTable createTypesTable() {
     	String[] cols = {"ID", "Nazwa", "Opis"};
         Object[][] data = new Object[types.size()][cols.length];
@@ -284,6 +301,7 @@ public class MainFrame extends JFrame {
         return new JTable(data, cols);
     }
 
+    /** Creates a table with reports*/
     private void createRaportFrame(List<Bike> filteredBikes, String frameName) {
         String[] cols = {"ID", "Typ", "Marka", "Model", "Rozmiar koła", "Opis", "Cena za godzine", "Stan"};
         Object[][] data = new Object[filteredBikes.size()][cols.length];
@@ -311,6 +329,7 @@ public class MainFrame extends JFrame {
         frame.setVisible(true);
     }
     
+    /** Refreshes all tables in the center panel to reflect updated data. */
     public void refreshTables() {
         // Remove old tables
         centerCardPanel.removeAll();
@@ -332,6 +351,7 @@ public class MainFrame extends JFrame {
         centerCardPanel.repaint();
     }
 
+    /** Creates a button for the interface. */
     private JButton createButton(String text) {
         JButton button = new JButton(text);
         Dimension size = new Dimension(240, 40);
