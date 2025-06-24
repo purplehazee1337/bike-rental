@@ -6,19 +6,26 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 
 /**
- *
+ * Unit tests for the {@link Bike} class.
+ * <p>
+ * Tests cover construction, field accessors and mutators, and the static ID counter.
+ * </p>
+ * 
  * @author Krzysztof Mickiewicz
- * @version 1.0
- * @since 2025-06-15
  */
-
 class BikeTest {
 
+    /**
+     * Resets the bike ID counter before each test to ensure test isolation.
+     */
     @BeforeEach
     void resetBikeIdCounter() {
         Bike.setIdCount(0);
     }
 
+    /**
+     * Tests creation of a {@link Bike} with the automatically generated ID and verifies all fields.
+     */
     @Test
     void BikeUnknownIdTest() {
         Types gorski = new Types("Górski", "Rower do jazdy w trudnym terenie");
@@ -34,6 +41,9 @@ class BikeTest {
         assertFalse(bike.isRented());
     }
 
+    /**
+     * Tests creation of a {@link Bike} with a known (provided) ID and verifies all fields.
+     */
     @Test
     void BikeKnownIdTest() {
         Types miejski = new Types("Miejski", "Do jazdy po mieście");
@@ -49,6 +59,9 @@ class BikeTest {
         assertTrue(bike.isRented());
     }
 
+    /**
+     * Tests all setter methods for the {@link Bike} class by updating all fields and verifying their values.
+     */
     @Test
     void SettersTest() {
         Types szosowy = new Types("Szosowy", "Lekki rower do jazdy po asfalcie");
@@ -72,6 +85,9 @@ class BikeTest {
         assertTrue(bike.isRented());
     }
 
+    /**
+     * Tests the static bike ID counter to ensure it is incremented correctly with each new instance.
+     */
     @Test
     void IdCountTest() {
         assertEquals(0, Bike.getIdCount());

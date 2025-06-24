@@ -12,7 +12,11 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Constructor and basic visibility tests for all main GUI dialog forms.
+ * Unit tests for GUI main dialog forms in the application.
+ * <p>
+ * These tests cover constructor and basic visibility,
+ * verifying that each main dialog form can be created and its title is as expected.
+ * </p>
  * 
  * @author Krzysztof Mickiewicz
  */
@@ -24,6 +28,9 @@ class UiFormsTest {
     private List<Rental> rentals;
     private MainFrame mainFrame;
 
+    /**
+     * Sets up model lists, resets counters, and initializes a default {@link MainFrame} before each test.
+     */
     @BeforeEach
     void setUp() {
         Types.setTypeIdCount(0);
@@ -48,6 +55,9 @@ class UiFormsTest {
         SwingUtilities.invokeLater(() -> mainFrame = new MainFrame(bikes, clients, rentals, types));
     }
 
+    /**
+     * Tests the constructor and title of {@link AddBikeForm}.
+     */
     @Test
     void addBikeFormConstructorTest() {
         AddBikeForm form = new AddBikeForm(mainFrame, bikes, types);
@@ -55,6 +65,9 @@ class UiFormsTest {
         assertEquals("Nowy rower", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of {@link AddTypeForm}.
+     */
     @Test
     void addTypeFormConstructorTest() {
         AddTypeForm form = new AddTypeForm(mainFrame, types);
@@ -62,6 +75,9 @@ class UiFormsTest {
         assertEquals("Nowy typ roweru", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of {@link EditBikeForm}.
+     */
     @Test
     void editBikeFormConstructorTest() {
         EditBikeForm form = new EditBikeForm(mainFrame, bikes, types);
@@ -69,6 +85,9 @@ class UiFormsTest {
         assertEquals("Edytuj rower", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of {@link EditTypeForm}.
+     */
     @Test
     void editTypeFormConstructorTest() {
         EditTypeForm form = new EditTypeForm(mainFrame, types);
@@ -76,6 +95,9 @@ class UiFormsTest {
         assertEquals("Edytuj typ roweru", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of {@link AddClientForm}.
+     */
     @Test
     void addClientFormConstructorTest() {
         AddClientForm form = new AddClientForm(mainFrame, clients);
@@ -83,6 +105,9 @@ class UiFormsTest {
         assertEquals("Nowy klient", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of {@link EditClientForm}.
+     */
     @Test
     void editClientFormConstructorTest() {
         EditClientForm form = new EditClientForm(mainFrame, clients);
@@ -90,6 +115,9 @@ class UiFormsTest {
         assertEquals("Edytuj klienta", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of {@link DeleteBikeForm}.
+     */
     @Test
     void deleteBikeFormConstructorTest() {
         DeleteBikeForm form = new DeleteBikeForm(mainFrame, bikes, rentals);
@@ -97,6 +125,9 @@ class UiFormsTest {
         assertEquals("Usuń rower", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of {@link DeleteTypeForm}.
+     */
     @Test
     void deleteTypeFormConstructorTest() {
         DeleteTypeForm form = new DeleteTypeForm(mainFrame, types, bikes);
@@ -104,6 +135,9 @@ class UiFormsTest {
         assertEquals("Usuń typ roweru", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of {@link DeleteClientForm}.
+     */
     @Test
     void deleteClientFormConstructorTest() {
         DeleteClientForm form = new DeleteClientForm(mainFrame, clients, rentals);
@@ -111,6 +145,9 @@ class UiFormsTest {
         assertEquals("Usuń klienta", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of {@link AddRentalForm}.
+     */
     @Test
     void addRentalFormConstructorTest() {
         AddRentalForm form = new AddRentalForm(mainFrame, bikes, clients, rentals);
@@ -118,6 +155,9 @@ class UiFormsTest {
         assertEquals("Nowe wypożyczenie", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of {@link ReturnRentalForm}.
+     */
     @Test
     void returnRentalFormConstructorTest() {
         ReturnRentalForm form = new ReturnRentalForm(mainFrame, rentals);
@@ -125,6 +165,9 @@ class UiFormsTest {
         assertEquals("Zwróć wypożyczenie", form.getTitle());
     }
 
+    /**
+     * Tests the constructor and title of the main application frame.
+     */
     @Test
     void mainFrameConstructorTest() {
         MainFrame frame = new MainFrame(bikes, clients, rentals, types);

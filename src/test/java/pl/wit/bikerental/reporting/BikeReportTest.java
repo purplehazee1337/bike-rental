@@ -14,13 +14,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for class BikeReport
- */
-/**
+ * Unit tests for the {@link Raports} reporting class.
+ * <p>
+ * Tests cover reporting of unrented bikes, currently rented bikes, overdue rentals,
+ * and behavior with empty input lists.
+ * </p>
+ * 
  * @author Krzysztof Mickiewicz
- *
  */
-
 class BikeReportTest {
 
     private List<Bike> bikes;
@@ -29,6 +30,9 @@ class BikeReportTest {
     private Types miejski;
     private Client client;
 
+    /**
+     * Sets up test data and resets static counters before each test.
+     */
     @BeforeEach
     void setUp() {
         Bike.setIdCount(0);
@@ -48,6 +52,10 @@ class BikeReportTest {
         rentals = new ArrayList<>();
     }
 
+    /**
+     * Tests reporting of unrented bikes.
+     * Only bikes that have their rented status set to false should be included.
+     */
     @Test
     void unrentedBikesTest() {
         bikes.get(0).setRented(true); // B1 rented
@@ -61,6 +69,10 @@ class BikeReportTest {
         assertFalse(unrented.contains(bikes.get(0)));
     }
 
+    /**
+     * Tests reporting of currently rented bikes.
+     * Both rentals with plannedEnd in the past or future, but not yet returned, should be included.
+     */
     @Test
     void currentlyRentedTest() {
         // Rental 1: actualReturnDate == null, plannedEnd in future
@@ -87,6 +99,10 @@ class BikeReportTest {
         assertFalse(currentlyRented.contains(bikes.get(2)));
     }
 
+    /**
+     * Tests reporting of bikes with overdue rentals (not yet returned and past deadline).
+     * Only rentals that are overdue and not returned should be included.
+     */
     @Test
     void overtimeRentedTest() {
         LocalDateTime now = LocalDateTime.now();
@@ -113,6 +129,9 @@ class BikeReportTest {
         assertFalse(overtime.contains(bikes.get(2)));
     }
 
+    /**
+     * Tests that reports return empty lists when called with empty input data.
+     */
     @Test
     void emptyListsTest() {
         assertTrue(Raports.unrentedBikes(new ArrayList<>()).isEmpty());

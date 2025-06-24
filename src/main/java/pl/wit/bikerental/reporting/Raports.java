@@ -8,23 +8,30 @@ import pl.wit.bikerental.model.Bike;
 import pl.wit.bikerental.model.Rental;
 
 /**
-*
-* @author Krzysztof Mickiewicz
-* @version 1.0
-* @since 2025-06-15
-*/
+ * Utility class providing reporting methods for bikes and rentals.
+ * <p>
+ * This class contains static methods to generate various reports about the status of bikes
+ * and rentals, such as listing unrented bikes, overdue rentals, and currently rented bikes.
+ * </p>
+ * 
+ * @author Krzysztof Mickiewicz
+ */
 
 public class Raports {
 
-    // --- Report: List of not rented bikes --- //
+	/**
+     * Returns a list of bikes that are currently not rented.
+     */
     public static List<Bike> unrentedBikes(List<Bike> bikes) {
         return bikes.stream()
             .filter(bike -> !bike.isRented())
             .peek(System.out::println)
             .collect(Collectors.toList());
     }
-
-    // --- Report: List of overdue rentals (not yet returned and past deadline) --- //
+    
+    /**
+     * Returns a list of bikes for rentals that are overdue (not yet returned and past the planned end date).
+     */
     public static List<Bike> overtimeRentedBikes(List<Rental> rentals) {
         return rentals.stream()
             .filter(rent ->
@@ -36,8 +43,10 @@ public class Raports {
             .map(Rental::getBike)
             .collect(Collectors.toList());
     }
-
-    // --- Report: List of currently rented bikes (not returned, planned end exists) --- //
+    
+    /**
+     * Returns a list of bikes that are currently rented (not yet returned, planned end exists).
+     */
     public static List<Bike> currentlyRentedBikes(List<Rental> rentals) {
         return rentals.stream()
             .filter(rent ->

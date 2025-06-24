@@ -14,7 +14,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for Service class.
+ * Unit tests for the {@link Service} class.
+ * <p>
+ * Tests cover adding, editing, finding, and removing domain objects as well as rental logic.
+ * </p>
  *
  * @author Krzysztof Mickiewicz
  */
@@ -30,6 +33,9 @@ class ServiceTest {
     private Client client;
     private Bike bike;
 
+    /**
+     * Initializes fresh lists and resets counters before each test.
+     */
     @BeforeEach
     void setUp() {
         Types.setTypeIdCount(0);
@@ -54,6 +60,9 @@ class ServiceTest {
         bike = bikes.get(0);
     }
 
+    /**
+     * Tests adding a new type to the system.
+     */
     @Test
     void addTypeTest() {
         int prev = types.size();
@@ -62,6 +71,9 @@ class ServiceTest {
         assertEquals("Szosowy", types.get(types.size() - 1).getName());
     }
 
+    /**
+     * Tests adding a new bike to the system.
+     */
     @Test
     void addBikeTest() {
         int prev = bikes.size();
@@ -70,6 +82,9 @@ class ServiceTest {
         assertEquals("Romet", bikes.get(bikes.size() - 1).getBrand());
     }
 
+    /**
+     * Tests adding a new client to the system.
+     */
     @Test
     void addClientTest() {
         int prev = clients.size();
@@ -78,6 +93,9 @@ class ServiceTest {
         assertEquals("Anna", clients.get(clients.size() - 1).getFirstName());
     }
 
+    /**
+     * Tests creating a new rental and completing it, checking bike and rental state.
+     */
     @Test
     void newRentalAndCompleteRentalTest() throws Exception {
         LocalDateTime now = LocalDateTime.now();
@@ -100,6 +118,9 @@ class ServiceTest {
         assertNotNull(rental.getActualReturnDate());
     }
 
+    /**
+     * Tests removing a bike by ID from the system.
+     */
     @Test
     void removeBikeByIdTest() throws Exception {
         Bike newBike = new Bike(miejski, "Romet", "City", "28", "Miasto", 15);
@@ -112,6 +133,9 @@ class ServiceTest {
         assertFalse(bikes.contains(newBike));
     }
 
+    /**
+     * Tests that removing a rented bike throws an exception.
+     */
     @Test
     void removeBikeByIdWhenRentedThrowsTest() throws Exception {
         LocalDateTime now = LocalDateTime.now();
@@ -125,6 +149,9 @@ class ServiceTest {
         assertTrue(ex.getMessage().contains("wypożyczony"));
     }
 
+    /**
+     * Tests removing a client by ID from the system.
+     */
     @Test
     void removeClientByIdTest() throws Exception {
         Client newClient = new Client("Joanna", "Testowa", "111222333", "joanna@test.com");
@@ -137,6 +164,9 @@ class ServiceTest {
         assertFalse(clients.contains(newClient));
     }
 
+    /**
+     * Tests that removing a client with an active rental throws an exception.
+     */
     @Test
     void removeClientByIdWithActiveRentalThrowsTest() throws Exception {
         LocalDateTime now = LocalDateTime.now();
@@ -150,6 +180,9 @@ class ServiceTest {
         assertTrue(ex.getMessage().contains("aktywne wypożyczenie"));
     }
 
+    /**
+     * Tests removing a type by ID from the system.
+     */
     @Test
     void removeTypeByIdTest() throws Exception {
         Types newType = new Types("Testowy", "Opis");
@@ -162,6 +195,9 @@ class ServiceTest {
         assertFalse(types.contains(newType));
     }
 
+    /**
+     * Tests that removing a type currently used by a bike throws an exception.
+     */
     @Test
     void removeTypeByIdWhenInUseThrowsTest() {
         Exception ex = assertThrows(Exception.class, () ->
@@ -170,6 +206,9 @@ class ServiceTest {
         assertTrue(ex.getMessage().contains("w użyciu"));
     }
 
+    /**
+     * Tests editing a bike's attributes by ID.
+     */
     @Test
     void editBikeByIdTest() throws Exception {
         Service.editBikeById(bikes, bike.getId(), "Trek", "FX 3", "29", "Opis zmieniony", 25);
@@ -182,6 +221,9 @@ class ServiceTest {
         assertEquals(25, edited.getPricePerH());
     }
 
+    /**
+     * Tests editing a client's attributes by ID.
+     */
     @Test
     void editClientByIdTest() throws Exception {
         Service.editClientById(clients, client.getId(), "Krzysztof", "Mickiewicz", "222111333", "krzysztof@example.com");
@@ -193,6 +235,9 @@ class ServiceTest {
         assertEquals("krzysztof@example.com", edited.getEmail());
     }
 
+    /**
+     * Tests editing rental start and planned end dates by rental ID.
+     */
     @Test
     void editRentalByIdTest() throws Exception {
         LocalDateTime start = LocalDateTime.now();
@@ -210,6 +255,9 @@ class ServiceTest {
         assertEquals(newEnd, rental.getPlannedEnd());
     }
 
+    /**
+     * Tests editing a type's attributes by type ID.
+     */
     @Test
     void editTypeByIdTest() throws Exception {
         Service.editTypeById(types, gorski.getId(), "Nowy typ", "Nowy opis");
@@ -217,6 +265,9 @@ class ServiceTest {
         assertEquals("Nowy opis", gorski.getDescription());
     }
 
+    /**
+     * Tests finding bikes, clients, types, and rentals by their IDs.
+     */
     @Test
     void findersTest() {
         assertEquals(bike, Service.findBikeById(bikes, bike.getId()));
@@ -232,10 +283,10 @@ class ServiceTest {
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.plusHours(2);
         try {
-			Service.newRental(rentals, bikes, clients, bike.getId(), client.getId(), start, end);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            Service.newRental(rentals, bikes, clients, bike.getId(), client.getId(), start, end);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         Rental rental = rentals.get(0);
         assertEquals(rental, Service.findRentalById(rentals, rental.getId()));
         assertNull(Service.findRentalById(rentals, "NOT_FOUND"));
