@@ -22,7 +22,7 @@ import pl.wit.bikerental.model.Types;
  */
 public class Database {
     /** Base path for data files. */
-    private static String basePath = "./src/main/resources/data/";
+    private static String basePath = "./";
 
     /** Sets the base path for data files. */
     public static void setBasePath(String basePath) {
