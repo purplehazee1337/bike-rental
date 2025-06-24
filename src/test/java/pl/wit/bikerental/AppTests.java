@@ -17,16 +17,31 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit test for App initialization logic.
+ * Unit tests for application initialization and persistence logic.
+ * <p>
+ * This test simulates the initialization logic of the application (excluding GUI/Swing component),
+ * verifying the correct setup of in-memory data, persistence to files, and recovery from storage.
+ * It ensures that types, bikes, and clients are correctly created if missing, and validates rental creation and completion.
+ * </p>
  * 
  * @author Krzysztof Mickiewicz
- * @version 1.0
- * @since 2025-06-22
  */
 class AppTest {
 
+    /**
+     * Path to the directory used for storing test data files.
+     */
     private final String testPath = "./src/test/resources/data/";
 
+    /**
+     * Sets up the test environment before each test by:
+     * <ul>
+     *     <li>Ensuring the test data directory exists.</li>
+     *     <li>Setting the database base path to the test directory.</li>
+     *     <li>Resetting static ID counters for all domain entities.</li>
+     *     <li>Cleaning up any pre-existing data files to ensure test isolation.</li>
+     * </ul>
+     */
     @BeforeEach
     void setUp() {
         new File(testPath).mkdirs();
@@ -45,6 +60,17 @@ class AppTest {
         }
     }
 
+    /**
+     * Tests the initialization logic of the App.
+     * <p>
+     * This includes:
+     * <ul>
+     *     <li>Reading from empty database and ensuring required entities are created if missing.</li>
+     *     <li>Persisting and reloading the data bundle.</li>
+     *     <li>Creating a rental and validating correct state changes for bikes and rentals.</li>
+     *     <li>Completing a rental and verifying the return state of the bike and rental.</li>
+     * </ul>
+     */
     @Test
     void appInitializationLogicTest() {
         // Simulate App.main logic (the non-GUI, non-Swing part)
@@ -85,20 +111,20 @@ class AppTest {
 
         // Add a rental and test
         try {
-			Service.newRental(rentals, bikes, clients, bikes.get(0).getId(), clients.get(0).getId(),
-			        java.time.LocalDateTime.now(), java.time.LocalDateTime.now().plusDays(1));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            Service.newRental(rentals, bikes, clients, bikes.get(0).getId(), clients.get(0).getId(),
+                    java.time.LocalDateTime.now(), java.time.LocalDateTime.now().plusDays(1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertEquals(1, rentals.size());
         assertTrue(bikes.get(0).isRented());
 
         // Complete rental and check state
         try {
-			Service.completeRental(rentals, rentals.get(0).getId());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+            Service.completeRental(rentals, rentals.get(0).getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         assertTrue(rentals.get(0).isReturned());
         assertFalse(bikes.get(0).isRented());
     }

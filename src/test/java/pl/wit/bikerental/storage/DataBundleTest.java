@@ -12,12 +12,18 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit test for DataBundle class.
- *
+ * Unit tests for the {@link DataBundle} class.
+ * <p>
+ * Verifies correct assignment and storage of types, bikes, clients, and rentals lists in the bundle.
+ * </p>
+ * 
  * @author Krzysztof Mickiewicz
  */
 class DataBundleTest {
 
+    /**
+     * Tests the constructor of {@link DataBundle} to ensure all fields are correctly assigned.
+     */
     @Test
     void dataBundleConstructorTest() {
         List<Types> types = new ArrayList<>();
@@ -27,7 +33,7 @@ class DataBundleTest {
 
         Types t = new Types("Górski", "Opis");
         types.add(t);
-        
+
         Bike b = new Bike(t, "Kross", "Hexagon", "27.5", "Opis roweru", 20);
         bikes.add(b);
 

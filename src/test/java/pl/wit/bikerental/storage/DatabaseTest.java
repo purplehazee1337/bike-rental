@@ -14,8 +14,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for Database class (saveAll, readAll, printAll).
- *
+ * Unit tests for the {@link Database} class, focusing on saveAll, readAll, and printAll methods.
+ * <p>
+ * These tests ensure correct serialization and deserialization of the application's data bundle,
+ * as well as safe printing of all data.
+ * </p>
+ * 
  * @author Krzysztof Mickiewicz
  */
 class DatabaseTest {
@@ -26,6 +30,9 @@ class DatabaseTest {
     private final String clientsFile = testPath + "clients.dat";
     private final String rentalsFile = testPath + "rentals.dat";
 
+    /**
+     * Sets up the test environment, resets static counters, and ensures test data directory exists before each test.
+     */
     @BeforeEach
     void setUp() {
         new File(testPath).mkdirs();
@@ -36,6 +43,9 @@ class DatabaseTest {
         Rental.setRentalIdCount(0);
     }
 
+    /**
+     * Cleans up data files after each test to ensure isolation between tests.
+     */
     @AfterEach
     void tearDown() {
         // Clean up files after test
@@ -45,6 +55,9 @@ class DatabaseTest {
         new File(rentalsFile).delete();
     }
 
+    /**
+     * Tests saving and loading of types and bikes, ensuring fields are correctly persisted and restored.
+     */
     @Test
     void saveAndLoadTypesAndBikesTest() {
         Types gorski = new Types("Górski", "Do jazdy w górach");
@@ -67,6 +80,9 @@ class DatabaseTest {
         assertEquals("Kross", loaded.bikes.get(0).getBrand());
     }
 
+    /**
+     * Tests saving and loading of clients and rentals, ensuring all relevant fields and relationships are maintained.
+     */
     @Test
     void saveAndLoadClientsAndRentalsTest() {
         Types typ = new Types("Trek", "Opis");
@@ -95,6 +111,9 @@ class DatabaseTest {
         assertEquals("Jan", loaded.rentals.get(0).getClient().getFirstName());
     }
 
+    /**
+     * Tests that the printAll method does not throw an exception with valid data.
+     */
     @Test
     void printAllDoesNotThrowTest() {
         Types typ = new Types("Testowy", "T");

@@ -8,11 +8,13 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for Rental class.
- */
-/**
+ * Unit tests for the {@link Rental} class.
+ * <p>
+ * Tests cover rental creation (with automatic and manual IDs), field accessors and mutators,
+ * and the static rental ID counter.
+ * </p>
+ * 
  * @author Krzysztof Mickiewicz
- *
  */
 class RentalTest {
 
@@ -21,6 +23,9 @@ class RentalTest {
     private LocalDateTime start;
     private LocalDateTime plannedEnd;
 
+    /**
+     * Sets up the test data and resets all static counters before each test.
+     */
     @BeforeEach
     void setUp() {
         Rental.setRentalIdCount(0);
@@ -35,6 +40,9 @@ class RentalTest {
         plannedEnd = LocalDateTime.of(2025, 6, 23, 12, 0);
     }
 
+    /**
+     * Tests creation of a {@link Rental} with an automatically generated ID and verifies all fields.
+     */
     @Test
     void rentalAutoIdTest() {
         Rental rental = new Rental(client, bike, start, plannedEnd);
@@ -47,6 +55,9 @@ class RentalTest {
         assertFalse(rental.isReturned());
     }
 
+    /**
+     * Tests creation of a {@link Rental} with a manually provided ID and verifies all fields.
+     */
     @Test
     void rentalKnownIdTest() {
         LocalDateTime actualReturn = LocalDateTime.of(2025, 6, 24, 10, 0);
@@ -60,6 +71,9 @@ class RentalTest {
         assertTrue(rental.isReturned());
     }
 
+    /**
+     * Tests all setter methods for the {@link Rental} class by updating all fields and verifying their values.
+     */
     @Test
     void rentalSettersTest() {
         Rental rental = new Rental(client, bike, start, plannedEnd);
@@ -93,6 +107,9 @@ class RentalTest {
         assertTrue(rental.isReturned());
     }
 
+    /**
+     * Tests the static rental ID counter, ensuring it increments with new instances and can be set directly.
+     */
     @Test
     void rentalIdCountTest() {
         assertEquals(0, Rental.getRentalIdCount());
