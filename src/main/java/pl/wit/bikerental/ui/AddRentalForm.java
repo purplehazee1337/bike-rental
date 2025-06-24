@@ -15,6 +15,8 @@ import java.util.List;
  * Dialog form for creating a new bike rental.
  * Allows the user to choose a client and bike from existing lists,
  * and specify the rental period using LocalDateTime inputs.
+ * 
+ * @author Dominik Pękala
  */
 public class AddRentalForm extends JDialog {
 	
@@ -30,14 +32,7 @@ public class AddRentalForm extends JDialog {
     /** Text field for entering the rental end date and time. */
     private JTextField toDateField;
 
-    /**
-     * Constructs the rental form UI and initializes input fields.
-     *
-     * @param parent   the parent frame that owns this dialog
-     * @param bikes    the list of available bikes
-     * @param clients  the list of clients
-     * @param rentals  the list of current rentals
-     */
+    /** Constructs the rental form UI and initializes input fields. */
     public AddRentalForm(JFrame parent, List<Bike> bikes, List<Client> clients, List<Rental> rentals) {
         super(parent, "Nowe wypożyczenie", true);
         setSize(300, 250);
@@ -49,7 +44,7 @@ public class AddRentalForm extends JDialog {
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Client selection
+        /** Client Combo box selection */
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(new JLabel("Klient (ID):"), gbc);
@@ -61,7 +56,7 @@ public class AddRentalForm extends JDialog {
         }
         panel.add(clientComboBox, gbc);
 
-        // Bike selection
+        /** Bike Combo Box selection */
         gbc.gridx = 0;
         gbc.gridy++;
         panel.add(new JLabel("Rower (ID):"), gbc);
@@ -73,7 +68,7 @@ public class AddRentalForm extends JDialog {
         }
         panel.add(bikeComboBox, gbc);
 
-        // Start date input
+        /** Start date input */
         gbc.gridx = 0;
         gbc.gridy++;
         panel.add(new JLabel("Od kiedy:"), gbc);
@@ -83,7 +78,7 @@ public class AddRentalForm extends JDialog {
         fromDateField.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
         panel.add(fromDateField, gbc);
 
-        // End date input
+        /** End date input */
         gbc.gridx = 0;
         gbc.gridy++;
         panel.add(new JLabel("Do kiedy:"), gbc);
@@ -93,7 +88,7 @@ public class AddRentalForm extends JDialog {
         toDateField.setText(LocalDateTime.now().plusDays(1).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
         panel.add(toDateField, gbc);
 
-        // Submit button
+        /** Bottom button */
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;
@@ -101,10 +96,7 @@ public class AddRentalForm extends JDialog {
         JButton addButton = new JButton("Dodaj wypożyczenie");
         panel.add(addButton, gbc);
         
-        /**
-         * Button listener that validates form input,
-         * parses the dates, and submits a new rental to the service.
-         */
+        /** Actions performed by buttons (adding new rental)*/
         addButton.addActionListener(e -> {
     	try {
             String bikeId = (String) bikeComboBox.getSelectedItem();

@@ -11,17 +11,12 @@ import java.util.List;
  * Dialog window that allows editing of an existing client's data based on their ID.
  * The form provides input fields for the client's personal information such as
  * first name, last name, phone number, and email.
+ * 
+ * @author Dominik Pękala
  */
 public class EditClientForm extends JDialog {
 	
-	/**
-     * Constructs a modal dialog used to update client information.
-     * Allows selecting a client by ID and editing their attributes.
-     * Changes are persisted using the service layer.
-     *
-     * @param parent  The parent JFrame that owns this dialog.
-     * @param clients The list of existing clients to be updated.
-     */
+	/** Constructs a dialog used to update client information. */
     public EditClientForm(JFrame parent, List<Client> clients) {
         super(parent, "Edytuj klienta", true);
         setSize(400, 300);
@@ -35,7 +30,7 @@ public class EditClientForm extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // ComboBoxes and input fields
+        /** UI components for input */
         JComboBox<String> idCombo = new JComboBox<>();
         for (Client c : clients) {
             idCombo.addItem(c.getId());
@@ -45,7 +40,7 @@ public class EditClientForm extends JDialog {
         JTextField phoneField = new JTextField(20);
         JTextField emailField = new JTextField(20);
 
-        // Form layout
+        /** Form layout */
         gbc.gridx = 0; gbc.gridy = 0;
         formPanel.add(new JLabel("ID klienta:"), gbc);
         gbc.gridx = 1;
@@ -71,14 +66,14 @@ public class EditClientForm extends JDialog {
         gbc.gridx = 1;
         formPanel.add(emailField, gbc);
 
-        // Buttons
+        /** Bottom buttons */
         JPanel buttonPanel = new JPanel();
         JButton updateButton = new JButton("Zmień");
         JButton cancelButton = new JButton("Anuluj");
         buttonPanel.add(updateButton);
         buttonPanel.add(cancelButton);
 
-        // Update logic
+        /** Actions performed by buttons (editing existing client) */
         updateButton.addActionListener(e -> {
         	try {
         		String id = (String) idCombo.getSelectedItem();
@@ -104,7 +99,7 @@ public class EditClientForm extends JDialog {
             }
         });
         
-        // Close form without changes
+        /** Closing the form without saving. */
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);

@@ -12,17 +12,12 @@ import java.util.List;
  * Dialog window that allows the user to delete a client from the system.
  * The user selects a client ID from a dropdown list. If the client has no active rentals,
  * they can be removed from the system.
+ * 
+ * @author Dominik Pękala
  */
 public class DeleteClientForm extends JDialog {
 	
-	/**
-     * Constructs a modal dialog for deleting a client from the system.
-     * It provides a combo box with client IDs and validates removal through the service layer.
-     *
-     * @param parent  the parent frame of the dialog (usually the main application window)
-     * @param clients the current list of all clients in the system
-     * @param rentals the list of rentals used to check whether a client can be safely deleted
-     */
+	/** Constructs a dialog for deleting a client from the system. */
     public DeleteClientForm(JFrame parent, List<Client> clients, List<Rental> rentals) {
         super(parent, "Usuń klienta", true);
         setSize(200, 160);
@@ -36,25 +31,26 @@ public class DeleteClientForm extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Dropdown to choose client ID
+        /** client ID Combo Box */
         JComboBox<String> idCombo = new JComboBox<>();
         for (Client c : clients) {
             idCombo.addItem(c.getId());
         }
         
-        // Form layout
+        /** Form layout */
         gbc.gridx = 0; gbc.gridy = 0;
         formPanel.add(new JLabel("Wybierz ID klienta:"), gbc);
         gbc.gridx = 1;
         formPanel.add(idCombo, gbc);
 
-        // Action buttons
+        /** Bottom buttons */
         JPanel buttonPanel = new JPanel();
         JButton deleteButton = new JButton("Usuń");
         JButton cancelButton = new JButton("Anuluj");
         buttonPanel.add(deleteButton);
         buttonPanel.add(cancelButton);
 
+        /** Actions performed by buttons (deleting new client) */
         deleteButton.addActionListener(e -> {
         	try {
         		
@@ -73,7 +69,7 @@ public class DeleteClientForm extends JDialog {
             }
         });
         
-        // Close form without changes
+        /** Closing the form without saving. */
         cancelButton.addActionListener(e -> dispose());
 
         mainPanel.add(formPanel, BorderLayout.CENTER);

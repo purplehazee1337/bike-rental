@@ -10,19 +10,15 @@ import java.util.List;
 /**
  * Dialog window allowing the user to mark a rental as completed (returned).
  * The user selects a rental by ID from a dropdown list and confirms the return.
+ * 
+ * @author Dominik Pękala
  */
 public class ReturnRentalForm extends JDialog {
 	
 	/** Dropdown list for selecting the rental ID to be marked as returned. */
     private JComboBox<String> rentalIdComboBox;
 
-    /**
-     * Constructs a modal dialog for returning a rental.
-     * Allows the user to select a rental by ID and mark it as completed.
-     *
-     * @param parent   The parent frame to which this dialog is modal.
-     * @param rentals  The list of existing rentals in the system.
-     */
+    /** Constructs a modal dialog for returning a rental. */
     public ReturnRentalForm(JFrame parent, List<Rental> rentals) {
         super(parent, "Zwróć wypożyczenie", true);
         setSize(300, 160);
@@ -34,7 +30,7 @@ public class ReturnRentalForm extends JDialog {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Form layout
+        /** Form layout */
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(new JLabel("ID wypożyczenia:"), gbc);
@@ -46,7 +42,7 @@ public class ReturnRentalForm extends JDialog {
         }
         panel.add(rentalIdComboBox, gbc);
 
-        // Return button
+        /** Bottom buttons */
         gbc.gridx = 0;
         gbc.gridy++;
         gbc.gridwidth = 2;
@@ -54,7 +50,7 @@ public class ReturnRentalForm extends JDialog {
         JButton returnButton = new JButton("Zwróć");
         panel.add(returnButton, gbc);
 
-        // Return logic
+        /** Actions performed by buttons (returning existing rental) */
         returnButton.addActionListener(e -> {
         	try {
                 String id = (String) rentalIdComboBox.getSelectedItem();
